@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Accessory</title>
+<style type="text/css" rel="stylesheet">
+body {
+    font-size:12px;
+    margin: 0px;
+    background-color:#F0F0EE;
+    overflow: hidden;
+}
+td.left1 {
+    font-size:12px;
+    width: 50px;
+    padding: 2px;
+}
+td.right1 {
+    font-size:12px;
+    padding: 2px;
+}
+td.left2 {
+    font-size:12px;
+    width: 35px;
+    padding: 2px;
+}
+td.right2 {
+    font-size:12px;
+    padding: 2px;
+    width: 50px;
+}
+</style>
+<script type="text/javascript">
+    function changeType(obj) {
+        var url = document.getElementById('url');
+        var imgFile = document.getElementById('imgFile');
+        var trRemark = document.getElementById('trRemark');
+        if (obj.value == 1) {
+            url.style.display = 'none';
+            imgFile.style.display = '';
+            trRemark.style.display = 'none';
+        } else {
+            url.style.display = '';
+            imgFile.style.display = 'none';
+            trRemark.style.display = '';
+        }
+    }
+</script>
+</head>
+<body>
+<form name="uploadForm" method="post" enctype="multipart/form-data" action="/kindeditor/upload">
+    <input type="hidden" id="editorId" name="id" value="" />
+    <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="left1">
+          <select id="type" name="type" onchange="changeType(this);">
+              <option value="1" selected="selected">Upload</option>
+              <option value="2">Insert URL</option>
+          </select>
+        </td>
+        <td class="right1">
+          <input type="file" id="imgFile" name="imgFile" style="width:220px;" />
+          <input type="text" id="url" name="url" value="http://" maxlength="255" style="width:220px;display:none;" />
+        </td>
+      </tr>
+      <tr id="trRemark" style="display:none;">
+        <td class="left1" align="right">Description：</td>
+        <td class="right1"><input type="text" id="description" name="description" value="uploaded file" maxlength="100" style="width:220px;" /></td>
+      </tr>
+    </table>
+</form>
+</body>
+</html>
+

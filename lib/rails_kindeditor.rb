@@ -1,0 +1,3 @@
+module RailsKindeditor
+  # Your code goes here...
+end
