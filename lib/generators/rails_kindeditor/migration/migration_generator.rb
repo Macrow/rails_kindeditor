@@ -3,7 +3,7 @@ require 'rails/generators/active_record'
 module RailsKindeditor
   class MigrationGenerator < Rails::Generators::Base
     source_root File.expand_path('../templates', __FILE__)
-    desc "Copy model , migration and uploader to your application."
+    desc "Copy models uploaders and migration to your application."
 
     def copy_model_files
       copy_file "models/asset.rb", "app/models/kindeditor/asset.rb"
