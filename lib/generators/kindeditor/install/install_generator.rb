@@ -4,7 +4,7 @@ module RailsKindeditor
     desc "Copy kindeditor files to your application."
 
     def copy_kindeditor_files
-      directory "kindeditor", "public/javascripts/"
+      directory "kindeditor", "public/javascripts/kindeditor"
     end
   end
 end

@@ -1,0 +1,9 @@
+Description:
+    Copy kindeditor files into your application
+
+Example:
+    rails generate rails_kindeditor:install
+
+    This will create:
+        public/javascripts/kindeditor
+
