@@ -1,0 +1,34 @@
+== kindeditor for rails3
+
+== Installation
+
+  gem install rails_kindeditor
+
+After you install rails_kindeditor and add it to your Gemfile, you need to run the generator:
+
+  rails generate rails_kindeditor:install
+
+The generator will copy kindeditor to your application. When you are done, you are ready to add migration using the generator:
+
+  rails generate rails_kindeditor:migration
+
+The generator will copy migration to your application. When you are done, remember run rake db:migrate:
+
+  rake db:migrate
+
+== Usage
+
+  Basically include this in the page you wish to use the editor in:
+  <%= include_kindeditor %>
+
+  then use it like this:
+  <%= f.text_area :content, :id => "editor_id" %>
+  or <%= text_area_tag :content, :id => "editor_id" %>
+  or <textarea id="editor_id"></textarea>
+
+  just assign the id to "editor_id".
+
+== License
+
+MIT License. Copyright 2011
+
