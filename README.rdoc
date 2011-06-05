@@ -16,6 +16,11 @@ The generator will copy migration to your application. When you are done, rememb
 
   rake db:migrate
 
+Don't forget add this to your Gemfile
+
+  gem "carrierwave", "~> 0.5.4"
+  gem "rails_kindeditor"
+
 == Usage
 
   Basically include this in the page you wish to use the editor in:

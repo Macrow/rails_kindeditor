@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = "kindeditor for rails3"
   s.description = "kindeditor for rails3, including image and file upload with carrierwave."
 
-  s.add_dependency "carrierwave"
+  s.add_dependency("carrierwave", "~> 0.5.4")
 
   s.rubyforge_project = "rails_kindeditor"
 
