@@ -23,15 +23,22 @@ Don't forget add this to your Gemfile
 
 == Usage
 
-  Basically include this in the page you wish to use the editor in:
-  <%= include_kindeditor %>
+Basically include <%= include_kindeditor_if_needed %> under the <head> element of your in your layout file:
 
-  then use it like this:
-  <%= f.text_area :content, :id => "editor_id" %>
-  or <%= text_area_tag :content, :id => "editor_id" %>
-  or <textarea id="editor_id"></textarea>
+  <%= include_kindeditor_if_needed %>
 
-  just assign the id to "editor_id".
+In your controller, use include_kindeditor method to load kindeditor javascript:
+
+  include_kindeditor
+
+You can load kindeditor javascript only in some action if you needed:
+
+  include_kindeditor :only => [:new, :edit]
+  include_kindeditor :except => [:index, :show, :destroy, :create]
+
+You can config kindeditor by rails_kindeditor-init.js file:
+
+  public/javascripts/kindeditor/kindeditor-init.js
 
 == License
 
