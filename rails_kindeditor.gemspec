@@ -12,13 +12,13 @@ Gem::Specification.new do |s|
   s.summary     = "kindeditor for rails3"
   s.description = "kindeditor for rails3, including image and file upload with carrierwave."
 
-  s.add_dependency("carrierwave", "~> 0.5.4")
-
   s.rubyforge_project = "rails_kindeditor"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
+
+  s.add_dependency("carrierwave", "~> 0.5.4")
 end
 

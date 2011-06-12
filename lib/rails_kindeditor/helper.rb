@@ -8,6 +8,5 @@ module RailsKindeditor
   end
 end
 
-
-ActionView::Helpers::AssetTagHelper.send(:include, RailsKindeditor::Helper)
+ActionView::Base.send(:include, RailsKindeditor::Helper)
 
