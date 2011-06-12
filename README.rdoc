@@ -36,6 +36,10 @@ You can load kindeditor javascript only in some action if you needed:
   include_kindeditor :only => [:new, :edit]
   include_kindeditor :except => [:index, :show, :destroy, :create]
 
+Assign your textarea with id
+
+  :id => "kindeditor_id"
+
 You can config kindeditor by rails_kindeditor-init.js file:
 
   public/javascripts/kindeditor/kindeditor-init.js
