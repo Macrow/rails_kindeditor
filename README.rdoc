@@ -2,7 +2,14 @@
 
 == Installation
 
-  gem install rails_kindeditor
+add this to your Gemfile
+
+  gem "carrierwave", "~> 0.5.4"
+  gem "rails_kindeditor"
+
+Run "bundle" command.
+
+  bundle
 
 After you install rails_kindeditor and add it to your Gemfile, you need to run the generator:
 
@@ -15,11 +22,6 @@ The generator will copy kindeditor to your application. When you are done, you a
 The generator will copy migration to your application. When you are done, remember run rake db:migrate:
 
   rake db:migrate
-
-Don't forget add this to your Gemfile
-
-  gem "carrierwave", "~> 0.5.4"
-  gem "rails_kindeditor"
 
 == Usage
 

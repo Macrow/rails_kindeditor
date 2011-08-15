@@ -34,7 +34,7 @@ class Kindeditor::AssetsController < ApplicationController
             else
               "id"
             end
-    @images = Image.where("file_type LIKE '%image%'").order(order).all
+    @images = Kindeditor::Image.where("file_type LIKE '%image%'").order(order).all
     @json = []
     for image in @images
       temp = %Q{{"filesize":#{image.file_size},
