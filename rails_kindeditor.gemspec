@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors     = "Macrow"
   s.email       = "Macrow_wh@163.com"
   s.homepage    = ""
-  s.summary     = "kindeditor for rails3"
-  s.description = "kindeditor for rails3, including image and file upload with carrierwave."
+  s.summary     = "Kindeditor(4.x) for Rails3"
+  s.description = "Kindeditor(4.x) for Rails3, including image and file upload with carrierwave."
 
   s.rubyforge_project = "rails_kindeditor"
 
@@ -19,6 +19,6 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency("carrierwave", "~> 0.5.4")
+  s.add_dependency("carrierwave")
 end
 

@@ -1,27 +1,23 @@
-== kindeditor for rails3
+== Kindeditor(4.x) for Rails3
+
+Kindeditor for Rails3, including image and file upload with carrierwave.
 
 == Installation
 
-add this to your Gemfile
+Add this to your Gemfile
 
-  gem "carrierwave", "~> 0.5.4"
+  gem "carrierwave"
   gem "rails_kindeditor"
 
 Run "bundle" command.
 
   bundle
 
-After you install rails_kindeditor and add it to your Gemfile, you need to run the generator:
+Run install generator:
 
   rails generate rails_kindeditor:install
-
-The generator will copy kindeditor to your application. When you are done, you are ready to add migration using the generator:
-
-  rails generate rails_kindeditor:migration
-
-The generator will copy migration to your application. When you are done, remember run rake db:migrate:
-
-  rake db:migrate
+  
+That's all! By default, rails_kindeditor do not save upload file information into database.
 
 == Usage
 
@@ -33,16 +29,44 @@ In your controller, use include_kindeditor method to load kindeditor javascript:
 
   include_kindeditor
 
-You can load kindeditor javascript only in some action if you needed:
-
-  include_kindeditor :only => [:new, :edit]
-  include_kindeditor :except => [:index, :show, :destroy, :create]
-
 Assign your textarea with id
 
   :id => "kindeditor_id"
 
-You can config kindeditor by rails_kindeditor-init.js file:
+That's all.
+
+== Save upload file information into database(optional)
+
+rails_kindeditor can save upload file information into database.
+
+Just run migration generate, there are two ORM options for you: 1.active_record 2.mongoid, default is active_record.
+
+  rails generate rails_kindeditor:migration
+  or
+  rails generate rails_kindeditor:migration -o mongoid
+
+The generator will copy model and migration to your application. When you are done, remember run rake db:migrate:
+
+  rake db:migrate
+  
+That's all.  
+
+== Configuration options
+
+When you use include_kindeditor_if_needed function, you can set :lang and :cache options like this:
+
+  <%= include_kindeditor_if_needed :lang => :en %>
+  <%= include_kindeditor_if_needed :lang => :zh_CN %>
+  <%= include_kindeditor_if_needed :cache => true %>
+  <%= include_kindeditor_if_needed :cache => "my-cache-name"  %>
+  <%= include_kindeditor_if_needed :lang => :zh_CN, :cache => true %>
+
+You can load kindeditor javascript only in some action if you needed:
+
+  include_kindeditor :only => [:new, :edit]
+  include_kindeditor :except => [:index, :show, :destroy, :create]
+  
+You can config kindeditor by rails_kindeditor-init.js file, please read Kindeditor's documents:
 
   public/javascripts/kindeditor/kindeditor-init.js
 
@@ -50,3 +74,78 @@ You can config kindeditor by rails_kindeditor-init.js file:
 
 MIT License. Copyright 2011
 
+===========================================================
+
+== Kindeditor(4.x) for Rails3 中文文档
+
+== 安装
+
+将下面代码加入Gemfile：
+
+  gem "carrierwave"
+  gem "rails_kindeditor"
+
+运行"bundle"命令：
+
+  bundle
+
+安装Kindeditor，运行下面的代码：
+
+  rails generate rails_kindeditor:install
+  
+完毕！默认情况下，rails_kindeditor在上传文件时不会把文件信息记录入数据库。
+
+== 使用
+
+在你的layout文件中的<head></head>内包含下面代码：
+
+  <%= include_kindeditor_if_needed %>
+
+在你需要使用的controller里面，包含下面代码来控制加载javascript:
+
+  include_kindeditor
+
+把需要转换的textarea赋予下列id值：
+
+  :id => "kindeditor_id"
+
+完毕！
+
+== 将上传文件信息记录入数据库（可选）
+
+rails_kindeditor 可以将上传文件信息记录入数据库，以便扩展应用.
+
+运行下面的代码，有两项选项：1.active_record 2.mongoid，默认是active_record。
+
+  rails generate rails_kindeditor:migration
+  or
+  rails generate rails_kindeditor:migration -o mongoid
+
+运行下面的代码：
+
+  rake db:migrate
+
+完毕！
+
+== 配置选项
+
+当你使用include_kindeditor_if_needed时，你可以像下面一样设置:lang和:cache：
+
+  <%= include_kindeditor_if_needed :lang => :en %>
+  <%= include_kindeditor_if_needed :lang => :zh_CN %>
+  <%= include_kindeditor_if_needed :cache => true %>
+  <%= include_kindeditor_if_needed :cache => "my-cache-name"  %>
+  <%= include_kindeditor_if_needed :lang => :zh_CN, :cache => true %>
+
+你可以有选择性地加载kindeditor的javascript：
+
+  include_kindeditor :only => [:new, :edit]
+  include_kindeditor :except => [:index, :show, :destroy, :create]
+  
+你可以通过修改rails_kindeditor-init.js来配置kindeditor，详细配置方法可以阅读Kindeditor的文档:
+
+  public/javascripts/kindeditor/kindeditor-init.js
+
+== License
+
+MIT License. Copyright 2011

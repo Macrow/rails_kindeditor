@@ -2,10 +2,18 @@ module RailsKindeditor
   class MigrationGenerator < Rails::Generators::Base
     include Rails::Generators::Migration
     source_root File.expand_path('../templates', __FILE__)
-    desc "Copy migration to your application."
+    desc "Copy model and migration to your application."
+    class_option :orm, :type => :string, :aliases => "-o", :default => "active_record", :desc => "ORM options: active_record or mongoid"
 
-    def copy_migration_file
-      migration_template "migration/migration.rb", "db/migrate/create_kindeditor_assets.rb"
+    def copy_files
+      orm = options[:orm].to_s
+      orm = "active_record" unless %w{active_record mongoid}.include?(orm)
+      %w(asset file flash image media).each do |file|
+        copy_model(orm, file)
+      end
+      if orm == "active_record"
+        migration_template "migration/migration.rb", "db/migrate/create_kindeditor_assets.rb"
+      end
     end
 
    def self.next_migration_number(dirname)
@@ -14,6 +22,11 @@ module RailsKindeditor
      else
        "%.3d" % (current_migration_number(dirname) + 1)
      end
+   end
+   
+   private
+   def copy_model(orm, name)
+     template "models/#{orm}/kindeditor/#{name}.rb", "app/models/kindeditor/#{name}.rb"
    end
   end
 end

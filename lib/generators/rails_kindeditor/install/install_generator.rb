@@ -8,4 +8,3 @@ module RailsKindeditor
     end
   end
 end
-
