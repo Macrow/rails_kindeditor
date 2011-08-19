@@ -74,9 +74,9 @@ You can config kindeditor by rails_kindeditor-init.js file, please read Kindedit
 
 MIT License. Copyright 2011
 
-===========================================================
-
 == Kindeditor(4.x) for Rails3 中文文档
+
+可供Rails3使用的gem, 包括了图片和附件上传功能，文件按照类型、日期进行存储。上传采用了Carrierwave。
 
 == 安装
 
