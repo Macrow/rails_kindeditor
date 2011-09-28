@@ -6,8 +6,8 @@ module RailsKindeditor
     def copy_kindeditor_files
       if ::Rails.version < "3.1.0"
         directory "kindeditor", "public/javascripts/kindeditor"
-      else # In Rails3.1, just copy kindeditor_init.js
-        template "kindeditor/kindeditor-init.js", "app/assets/javascripts/kindeditor-init.js" 
+      else # Rails3.1+
+        directory "kindeditor", "public/kindeditor"
       end
     end
   end

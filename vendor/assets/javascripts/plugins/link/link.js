@@ -31,7 +31,13 @@ KindEditor.plugin('link', function(K) {
 					yesBtn : {
 						name : self.lang('yes'),
 						click : function(e) {
-							self.exec('createlink', urlBox.val(), typeBox.val()).hideDialog().focus();
+							var url = K.trim(urlBox.val());
+							if (url == 'http://' || K.invalidUrl(url)) {
+								alert(self.lang('invalidUrl'));
+								urlBox[0].focus();
+								return;
+							}
+							self.exec('createlink', url, typeBox.val()).hideDialog().focus();
 						}
 					}
 				}),

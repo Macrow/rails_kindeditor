@@ -47,7 +47,9 @@ KindEditor.plugin('map', function(K) {
 			},
 			beforeRemove : function() {
 				searchBtn.remove();
-				doc.write('');
+				if (doc) {
+					doc.write('');
+				}
 				iframe.remove();
 			}
 		});

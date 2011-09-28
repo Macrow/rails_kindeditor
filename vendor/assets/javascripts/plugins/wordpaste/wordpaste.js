@@ -24,13 +24,7 @@ KindEditor.plugin('wordpaste', function(K) {
 					name : self.lang('yes'),
 					click : function(e) {
 						var str = doc.body.innerHTML;
-						str = str.replace(/<meta(\n|.)*?>/ig, '');
-						str = str.replace(/<!(\n|.)*?>/ig, '');
-						str = str.replace(/<style[^>]*>(\n|.)*?<\/style>/ig, '');
-						str = str.replace(/<script[^>]*>(\n|.)*?<\/script>/ig, '');
-						str = str.replace(/<w:[^>]+>(\n|.)*?<\/w:[^>]+>/ig, '');
-						str = str.replace(/<xml>(\n|.)*?<\/xml>/ig, '');
-						str = str.replace(/\r\n|\n|\r/ig, '');
+						str = K.clearMsWord(str, self.filterMode ? self.htmlTags : K.options.htmlTags);
 						self.insertHtml(str).hideDialog().focus();
 					}
 				}

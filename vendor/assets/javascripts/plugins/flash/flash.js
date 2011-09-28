@@ -46,12 +46,29 @@ KindEditor.plugin('flash', function(K) {
 				yesBtn : {
 					name : self.lang('yes'),
 					click : function(e) {
-						var url = urlBox.val(),
-							html = K.mediaImg(self.themesPath + 'common/blank.gif', {
+						var url = K.trim(urlBox.val()),
+							width = widthBox.val(),
+							height = heightBox.val();
+						if (url == 'http://' || K.invalidUrl(url)) {
+							alert(self.lang('invalidUrl'));
+							urlBox[0].focus();
+							return;
+						}
+						if (!/^\d*$/.test(width)) {
+							alert(self.lang('invalidWidth'));
+							widthBox[0].focus();
+							return;
+						}
+						if (!/^\d*$/.test(height)) {
+							alert(self.lang('invalidHeight'));
+							heightBox[0].focus();
+							return;
+						}
+						var html = K.mediaImg(self.themesPath + 'common/blank.gif', {
 								src : url,
 								type : K.mediaType('.swf'),
-								width : widthBox.val(),
-								height : heightBox.val(),
+								width : width,
+								height : height,
 								quality : 'high'
 							});
 						self.insertHtml(html).hideDialog().focus();
@@ -69,7 +86,7 @@ KindEditor.plugin('flash', function(K) {
 				var uploadbutton = K.uploadbutton({
 					button : K('.ke-upload-button', div)[0],
 					fieldName : 'imgFile',
-					url : uploadJson + '?dir=flash',
+					url : K.addParam(uploadJson, 'dir=flash'),
 					afterUpload : function(data) {
 						if (data.error === 0) {
 							var url = K.formatUrl(data.url, 'absolute');

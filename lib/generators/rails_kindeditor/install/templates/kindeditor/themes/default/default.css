@@ -121,6 +121,16 @@
 	width: 16px;
 	height: 16px;
 }
+.ke-icon-date {
+	background-position: 0px -304px;
+	width: 25px;
+	height: 16px;
+}
+.ke-icon-time {
+	background-position: 0px -320px;
+	width: 25px;
+	height: 16px;
+}
 .ke-icon-formatblock {
 	background-position: 0px -336px;
 	width: 25px;
@@ -143,7 +153,7 @@
 }
 .ke-icon-hilitecolor {
 	background-position: 0px -400px;
-	width: 20px;
+	width: 23px;
 	height: 16px;
 }
 .ke-icon-bold {
@@ -183,6 +193,16 @@
 }
 .ke-icon-media {
 	background-position: 0px -528px;
+	width: 16px;
+	height: 16px;
+}
+.ke-icon-div {
+	background-position: 0px -544px;
+	width: 16px;
+	height: 16px;
+}
+.ke-icon-formula {
+	background-position: 0px -576px;
 	width: 16px;
 	height: 16px;
 }
@@ -353,6 +373,26 @@
 }
 .ke-icon-tablecolsplit {
 	background-position: 0px -1152px;
+	width: 16px;
+	height: 16px;
+}
+.ke-icon-anchor {
+	background-position: 0px -1168px;
+	width: 16px;
+	height: 16px;
+}
+.ke-icon-search {
+	background-position: 0px -1184px;
+	width: 16px;
+	height: 16px;
+}
+.ke-icon-new {
+	background-position: 0px -1200px;
+	width: 16px;
+	height: 16px;
+}
+.ke-icon-specialchar {
+	background-position: 0px -1216px;
 	width: 16px;
 	height: 16px;
 }
@@ -619,7 +659,6 @@
 .ke-dialog-body label {
 	margin-right: 10px;
 	cursor: pointer;
-	font-weight: bold;
 	display: -moz-inline-stack;
 	display: inline-block;
 	vertical-align: middle;

@@ -1,6 +1,6 @@
-== Kindeditor(4.x) for Rails3 (include 3.1 and 3.0.x)
+== Kindeditor4.0 for Rails3 (include 3.1 and 3.0.x)
 
-Kindeditor for Rails3, including image and file upload with carrierwave.
+Kindeditor for Rails3, including image and file upload using carrierwave.
 
 == Installation
 
@@ -21,34 +21,17 @@ That's all! By default, rails_kindeditor do not save upload file information int
 
 == Usage
 
-++++++ Rails3.1 ++++++ 
-
-add this lines in your application.js file.
-
-  //= require kindeditor
-  //= require kindeditor-init
-  
-add this lines in your application.css file.
-
-  *= require kindeditor
-
-Assign your textarea with id
-
-  :id => "kindeditor_id"
-
-That's all.
-  
-++++++ Rails3.0.x ++++++ 
-
 Basically include <%= include_kindeditor_if_needed %> under the <head> element of your in your layout file:
 
   <%= include_kindeditor_if_needed %>
 
-In your controller, use include_kindeditor method to load kindeditor javascript:
+In your controller, use include_kindeditor method to load kindeditor:
 
   include_kindeditor
+  or
+  include_kindeditor :only => [:new, :edit]
 
-Assign your textarea with id
+Assign your textarea with id in your form:
 
   :id => "kindeditor_id"
 
@@ -72,42 +55,15 @@ That's all.
 
 == Configuration options
 
-++++++ Rails3.1 ++++++ 
-
-You can add thie line in your application.js file to specify language.
-
-  //= require lang/en
-  or
-  //= require lang/zh_CN
-  or
-  //= require lang/zh_TW
-
-don't forget modify the config file:
-
-  assets/javascripts/kindeditor-init.js
-
-++++++ Rails3.0.x ++++++ 
-
-When you use include_kindeditor_if_needed function, you can set :lang and :cache options like this:
-
-  <%= include_kindeditor_if_needed :lang => :en %>
-  or
-  <%= include_kindeditor_if_needed :lang => :zh_CN %>
-  or
-  <%= include_kindeditor_if_needed :cache => true %>
-  or
-  <%= include_kindeditor_if_needed :cache => "my-cache-name"  %>
-  or
-  <%= include_kindeditor_if_needed :lang => :zh_CN, :cache => true %>
-
 You can load kindeditor javascript only in some action if you needed:
 
   include_kindeditor :only => [:new, :edit]
   include_kindeditor :except => [:index, :show, :destroy, :create]
   
-You can config kindeditor by rails_kindeditor-init.js file, please read Kindeditor's documents:
+You can config kindeditor by kindeditor-init.js file, please read Kindeditor's documents:
 
-  public/javascripts/kindeditor/kindeditor-init.js
+  public/kindeditor/kindeditor-init.js [Rails3.1]
+  public/javascripts/kindeditor/kindeditor-init.js [Rails3.0.x]
 
 == License
 
@@ -136,26 +92,6 @@ MIT License. Copyright 2011
 
 == 使用
 
-
-++++++ Rails3.1 ++++++ 
-
-将下列代码加入 application.js 文件中.
-
-  //= require kindeditor
-  //= require kindeditor-init
-  
-将下列代码加入 application.css 文件中.
-
-  *= require kindeditor
-
-把需要转换的textarea赋予下列id值：
-
-  :id => "kindeditor_id"
-
-完毕！
-  
-++++++ Rails3.0.x ++++++ 
-
 在你的layout文件中的<head></head>内包含下面代码：
 
   <%= include_kindeditor_if_needed %>
@@ -163,6 +99,8 @@ MIT License. Copyright 2011
 在你需要使用的controller里面，包含下面代码来控制加载javascript:
 
   include_kindeditor
+  或者
+  include_kindeditor :only => [:new, :edit]
 
 把需要转换的textarea赋予下列id值：
 
@@ -188,38 +126,15 @@ rails_kindeditor 可以将上传文件信息记录入数据库，以便扩展应
 
 == 配置选项(可选)
 
-++++++ Rails3.1 ++++++ 
-
-将下列代码加入 application.js 文件中，以便指定语言
-
-  //= require lang/en
-  or
-  //= require lang/zh_CN
-  or
-  //= require lang/zh_TW
-
-不要忘了修改下面的配置文件以生效:
-
-  assets/javascripts/kindeditor-init.js
-
-++++++ Rails3.0.x ++++++ 
-
-当你使用include_kindeditor_if_needed时，你可以像下面一样设置:lang和:cache：
-
-  <%= include_kindeditor_if_needed :lang => :en %>
-  <%= include_kindeditor_if_needed :lang => :zh_CN %>
-  <%= include_kindeditor_if_needed :cache => true %>
-  <%= include_kindeditor_if_needed :cache => "my-cache-name"  %>
-  <%= include_kindeditor_if_needed :lang => :zh_CN, :cache => true %>
-
 你可以有选择性地加载kindeditor的javascript：
 
   include_kindeditor :only => [:new, :edit]
   include_kindeditor :except => [:index, :show, :destroy, :create]
   
-你可以通过修改rails_kindeditor-init.js来配置kindeditor，详细配置方法可以阅读Kindeditor的文档:
+你可以通过修改kindeditor-init.js来配置kindeditor，详细配置方法可以阅读Kindeditor的文档:
 
-  public/javascripts/kindeditor/kindeditor-init.js
+  public/kindeditor/kindeditor-init.js [Rails3.1]
+  public/javascripts/kindeditor/kindeditor-init.js [Rails3.0.x]
 
 == License
 

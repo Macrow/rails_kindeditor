@@ -68,12 +68,13 @@ KindEditor.plugin('image', function(K) {
 					name : self.lang('yes'),
 					click : function(e) {
 						// insert local image
-						if (tabs.selectedIndex === 1) {
+						if (tabs && tabs.selectedIndex === 1) {
 							uploadbutton.submit();
+							localUrlBox.val('');
 							return;
 						}
 						// insert remote image
-						var url = urlBox.val(),
+						var url = K.trim(urlBox.val()),
 							width = widthBox.val(),
 							height = heightBox.val(),
 							title = titleBox.val(),
@@ -84,6 +85,21 @@ KindEditor.plugin('image', function(K) {
 								return false;
 							}
 						});
+						if (url == 'http://' || K.invalidUrl(url)) {
+							alert(self.lang('invalidUrl'));
+							urlBox[0].focus();
+							return;
+						}
+						if (!/^\d*$/.test(width)) {
+							alert(self.lang('invalidWidth'));
+							widthBox[0].focus();
+							return;
+						}
+						if (!/^\d*$/.test(height)) {
+							alert(self.lang('invalidHeight'));
+							heightBox[0].focus();
+							return;
+						}
 						self.exec('insertimage', url, title, width, height, 0, align).hideDialog().focus();
 					}
 				},
@@ -130,7 +146,7 @@ KindEditor.plugin('image', function(K) {
 			var uploadbutton = K.uploadbutton({
 				button : K('.ke-upload-button', div)[0],
 				fieldName : 'imgFile',
-				url : uploadJson + '?dir=image',
+				url : K.addParam(uploadJson, 'dir=image'),
 				afterUpload : function(data) {
 					if (data.error === 0) {
 						var width = widthBox.val(),
