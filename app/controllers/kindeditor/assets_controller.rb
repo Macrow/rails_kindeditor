@@ -6,7 +6,7 @@ class Kindeditor::AssetsController < ApplicationController
     @imgFile = params[:imgFile]
     @dir = params[:dir]
     unless @imgFile.nil?
-      if save_upload_info? # save upload info into database
+      if Kindeditor::AssetUploader.save_upload_info? # save upload info into database
         begin
           @asset = "Kindeditor::#{@dir.camelize}".constantize.new(:asset => @imgFile)
           if @asset.save
@@ -14,8 +14,8 @@ class Kindeditor::AssetsController < ApplicationController
           else
             show_error(@asset.errors.full_messages)
           end
-        rescue
-          show_error("Internal Error!")
+        rescue Exception => e
+          show_error(e.to_s)
         end
       else # do not touch database
         begin
@@ -24,8 +24,8 @@ class Kindeditor::AssetsController < ApplicationController
           render :text => ({:error => 0, :url => uploader.url}.to_json)
         rescue CarrierWave::UploadError => e
           show_error(e.message)
-        rescue
-          show_error("Internal Error!")
+        rescue Exception => e
+          show_error(e.to_s)
         end
       end
     else
@@ -115,14 +115,4 @@ class Kindeditor::AssetsController < ApplicationController
     render :text => ({:error => 1, :message => msg}.to_json)
   end
   
-  def save_upload_info?
-    begin
-      %w(asset file flash image media).each do |s|
-        "Kindeditor::#{s.camelize}".constantize
-      end
-      return true
-    rescue
-      return false
-    end
-  end
 end

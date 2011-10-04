@@ -17,6 +17,13 @@ class Kindeditor::AssetUploader < CarrierWave::Uploader::Base
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
+  def store_dir
+    if Kindeditor::AssetUploader.save_upload_info?
+      "uploads/#{model.class.to_s.underscore}/#{model.created_at.strftime("%Y%m")}"
+    else
+      "uploads/#{self.class.to_s.underscore.gsub(/(kindeditor\/)|(_uploader)/, '')}/#{Time.now.strftime("%Y%m")}"
+    end
+  end
 
   def cache_dir
     "#{Rails.root}/tmp/uploads"
@@ -62,6 +69,17 @@ class Kindeditor::AssetUploader < CarrierWave::Uploader::Base
   def filename
     @name ||= Time.now.to_s(:number)
     "#{@name}#{File.extname(original_filename).downcase}" if original_filename
+  end
+  
+  def self.save_upload_info?
+    begin
+      %w(asset file flash image media).each do |s|
+        "Kindeditor::#{s.camelize}".constantize
+      end
+      return true
+    rescue
+      return false
+    end
   end
 
 end
