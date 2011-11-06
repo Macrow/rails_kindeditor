@@ -410,6 +410,7 @@
 	border-bottom: 1px solid #CCC;
 	background-color: #F0F0EE;
 	padding: 2px 5px;
+	text-align: left;
 	overflow: hidden;
 }
 .ke-toolbar-icon {
@@ -419,7 +420,7 @@
 	overflow: hidden;
 }
 .ke-toolbar-icon-url {
-	background-image: url(default.gif);
+	background-image: url(default.png);
 }
 .ke-toolbar .ke-outline {
 	border: 1px solid #F0F0EE;
@@ -461,6 +462,7 @@
 	border: 0;
 	margin: 0;
 	padding: 0;
+	overflow: auto;
 }
 .ke-edit-textarea {
 	font: 12px/1.5 "Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
@@ -487,7 +489,7 @@
 	background-position: -0px -754px;
 	width: 15px;
 	height: 11px;
-	background-image: url(default.gif);
+	background-image: url(default.png);
 }
 .ke-statusbar-right-icon {
 	position: absolute;
@@ -497,7 +499,7 @@
 	background-position: -5px -741px;
 	width: 11px;
 	height: 11px;
-	background-image: url(default.gif);
+	background-image: url(default.png);
 }
 /* menu */
 .ke-menu {
@@ -635,7 +637,7 @@
 	right: 15px;
 	top: 15px;
 	cursor: pointer;
-	background-image: url(default.gif);
+	background-image: url(default.png);
 	overflow: hidden;
 	right: 10px;
 	top: 10px;
@@ -678,6 +680,7 @@
 	vertical-align: middle;
 	zoom: 1;
 	*display: inline;
+	width: auto;
 }
 .ke-dialog-body .ke-textarea {
 	display: block;
@@ -692,6 +695,13 @@
 .ke-dialog-body .ke-form {
 	margin: 0;
 	padding: 0;
+}
+.ke-dialog-loading {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	background: url("../common/loading.gif") no-repeat scroll center center transparent;
 }
 .ke-dialog-row {
 	margin-bottom: 10px;
@@ -932,6 +942,7 @@
 	width: 100px;
 	text-align: center;
 	overflow: hidden;
+	height:16px;
 }
 .ke-plugin-filemanager-body .ke-on {
 	border: 1px solid #5690D2;
