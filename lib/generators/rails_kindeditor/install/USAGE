@@ -5,5 +5,6 @@ Example:
     rails generate rails_kindeditor:install
 
     This will create:
-        public/javascripts/kindeditor
+        public/kindeditor
+        app/uploaders/kindeditor
 

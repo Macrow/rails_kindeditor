@@ -34,8 +34,8 @@ class Kindeditor::AssetsController < ApplicationController
   end
 
   def list
-    @root_path = Rails.public_path + "/uploads/"
-    @root_url = "/uploads/"
+    @root_path = Rails.public_path + "/#{Kindeditor::AssetUploader::BASE_DIR}/"
+    @root_url = "/#{Kindeditor::AssetUploader::BASE_DIR}/"
     @img_ext = Kindeditor::AssetUploader::EXT_NAMES[:image]
     @dir = params[:dir].strip || ""
     unless Kindeditor::AssetUploader::EXT_NAMES.keys.map(&:to_s).push("").include?(@dir)

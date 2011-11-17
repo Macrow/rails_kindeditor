@@ -1,13 +1,14 @@
 Description:
-    Copy model , migration and uploader to your application.
+    Copy model, migration and uploader to your application.
 
 Example:
     rails generate rails_kindeditor:migration
 
     This will create:
-        app/models/asset.rb
-        app/models/image.rb
-        app/models/file.rb
-        app/uploaders/image_uploader.rb
-        app/uploaders/file_uploader.rb
+        app/models/kindeditor/asset.rb
+        app/models/kindeditor/file.rb
+        app/models/kindeditor/flash.rb
+        app/models/kindeditor/image.rb
+        app/models/kindeditor/media.rb
+        db/migrate/xxxxxxxxx_create_kindeditor_assets.rb
 

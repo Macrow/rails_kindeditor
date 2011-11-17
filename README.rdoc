@@ -37,6 +37,11 @@ Assign your textarea with id in your form:
 
 That's all.
 
+== Customize upload directory(optional)
+
+When you run "rails generate rails_kindeditor:install", installer will copy uploader files in you app/uploaders folder.
+Just modify "BASE_DIR" or "store_dir" in asset_uploader.rb.
+
 == Save upload file information into database(optional)
 
 rails_kindeditor can save upload file information into database.
@@ -107,6 +112,11 @@ MIT License. Copyright 2011
   :id => "kindeditor_id"
 
 完毕！
+
+== 自定义上传目录（可选）
+
+当你运行"rails generate rails_kindeditor:install"的时候，安装器会将uploader拷贝到app/uploaders文件夹。
+在asset_uploader.rb文件中修改"BASE_DIR"或者"store_dir"即可（可参考Carrierwave）。
 
 == 将上传文件信息记录入数据库（可选）
 

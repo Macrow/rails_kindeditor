@@ -21,7 +21,7 @@ class Kindeditor::AssetUploader < CarrierWave::Uploader::Base
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
     if Kindeditor::AssetUploader.save_upload_info?
-      "#{BASE_DIR}/#{model.class.to_s.underscore.gsub(/(kindeditor\/)|(_uploader)/, '')}/#{model.created_at.strftime("%Y%m")}"
+      "#{BASE_DIR}/#{model.class.to_s.underscore}/#{model.created_at.strftime("%Y%m")}"
     else
       "#{BASE_DIR}/#{self.class.to_s.underscore.gsub(/(kindeditor\/)|(_uploader)/, '')}/#{Time.now.strftime("%Y%m")}"
     end
