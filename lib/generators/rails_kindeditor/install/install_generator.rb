@@ -8,8 +8,8 @@ module RailsKindeditor
         directory "kindeditor", "public/javascripts/kindeditor"
       else # Rails3.1+
         directory "kindeditor", "public/kindeditor"
-        directory "uploaders", "app/uploaders"
       end
+      directory "uploaders", "app/uploaders"
     end
   end
 end
