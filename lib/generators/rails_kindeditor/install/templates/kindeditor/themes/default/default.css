@@ -18,6 +18,13 @@
 	line-height: 0;
 	visibility: hidden;
 }
+.ke-shadow {
+	box-shadow: 1px 1px 3px #A0A0A0;
+	-moz-box-shadow: 1px 1px 3px #A0A0A0;
+	-webkit-box-shadow: 1px 1px 3px #A0A0A0;
+	filter: progid:DXImageTransform.Microsoft.Shadow(color='#A0A0A0', Direction=135, Strength=3);
+	background-color: #F0F0EE;
+}
 .ke-menu a,
 .ke-menu a:hover,
 .ke-dialog a,
@@ -412,12 +419,14 @@
 	padding: 2px 5px;
 	text-align: left;
 	overflow: hidden;
+	zoom: 1;
 }
 .ke-toolbar-icon {
 	background-repeat: no-repeat;
 	font-size: 0;
 	line-height: 0;
 	overflow: hidden;
+	display: block;
 }
 .ke-toolbar-icon-url {
 	background-image: url(default.png);
@@ -430,6 +439,8 @@
 	line-height: 0;
 	overflow: hidden;
 	cursor: pointer;
+	display: block;
+	float: left;
 }
 .ke-toolbar .ke-on {
 	border: 1px solid #5690D2;
@@ -452,6 +463,13 @@
 	font-size: 0;
 	line-height: 0;
 	overflow: hidden;
+	display: block;
+	float: left;
+}
+.ke-toolbar .ke-hr {
+	overflow: hidden;
+	height: 1px;
+	clear: both;
 }
 /* edit */
 .ke-edit {
@@ -606,16 +624,26 @@
 	position: absolute;
 	margin: 0;
 	padding: 0;
-	color: #333;
+}
+.ke-dialog-content {
 	background-color: #F0F0EE;
+	width: 100%;
+	height: 100%;
+	color: #333;
+	border: 1px solid #A0A0A0;
 }
 .ke-dialog-shadow {
-	border: 1px solid #A0A0A0;
-	border-radius: 0 0 4px 4px;
-	box-shadow: 0 4px 16px #A0A0A0;
-}
-.ke-dialog-no-shadow {
-	border: 1px solid #A0A0A0;
+	position: absolute;
+	z-index: -1;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	box-shadow: 3px 3px 7px #A0A0A0;
+	-moz-box-shadow: 3px 3px 7px #A0A0A0;
+	-webkit-box-shadow: 3px 3px 7px #A0A0A0;
+	filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='3', MakeShadow='true', ShadowOpacity='0.3');
+	background-color: #F0F0EE;
 }
 .ke-dialog-header {
 	border:0;
@@ -646,6 +674,7 @@
 	font: 12px/1.5 "sans serif",tahoma,verdana,helvetica;
 	text-align: left;
 	overflow: hidden;
+	background-color: #F0F0EE;
 }
 .ke-dialog-body textarea {
 	display: block;
@@ -701,7 +730,16 @@
 	top: 0;
 	left: 0;
 	z-index: 1;
-	background: url("../common/loading.gif") no-repeat scroll center center transparent;
+	text-align: center;
+}
+.ke-dialog-loading-content {
+	background: url("../common/loading.gif") no-repeat;
+    color: #666;
+    font-size: 14px;
+    font-weight: bold;
+    height: 31px;
+    line-height: 31px;
+    padding-left: 36px;
 }
 .ke-dialog-row {
 	margin-bottom: 10px;
@@ -710,6 +748,7 @@
 	font: 12px/1 "sans serif",tahoma,verdana,helvetica;
 	text-align: right;
 	padding:0 0 5px 0;
+	background-color: #F0F0EE;
 }
 .ke-dialog-preview,
 .ke-dialog-yes {
@@ -793,6 +832,8 @@
 .ke-upload-area {
 	position: relative;
 	overflow: hidden;
+	margin: 0;
+	padding: 0;
 }
 .ke-upload-area .ke-upload-file {
 	position: absolute;
@@ -803,8 +844,8 @@
 	margin: 0;
 	z-index: 811212;
 	border: 0 none;
-	opacity:0;
-	filter:alpha(opacity=0);
+	opacity: 0;
+	filter: alpha(opacity=0);
 }
 /* tabs */
 .ke-tabs {
