@@ -1,6 +1,6 @@
-== Kindeditor4.0 for Rails3 (include 3.1 and 3.0.x)
+== Kindeditor for Rails3 (3.x & 3.0.x)
 
-Kindeditor for Rails3, including image and file upload using carrierwave.
+Kindeditor(http://www.kindsoft.net/) for Rails3, including image and file upload using carrierwave.
 
 == Installation
 
@@ -29,7 +29,7 @@ In your controller, use include_kindeditor method to load kindeditor:
 
   include_kindeditor
   or
-  include_kindeditor :only => [:new, :edit]
+  include_kindeditor :only => [:new, :edit, :update, :create]
 
 Assign your textarea with id in your form:
 
@@ -62,17 +62,17 @@ That's all.
 
 You can load kindeditor javascript only in some action if you needed:
 
-  include_kindeditor :only => [:new, :edit]
-  include_kindeditor :except => [:index, :show, :destroy, :create]
+  include_kindeditor :only => [:new, :edit, :create, :update]
+  include_kindeditor :except => [:index, :show, :destroy]
   
 You can config kindeditor by kindeditor-init.js file, please read Kindeditor's documents:
 
-  public/kindeditor/kindeditor-init.js [Rails3.1]
+  public/kindeditor/kindeditor-init.js [Rails3.x]
   public/javascripts/kindeditor/kindeditor-init.js [Rails3.0.x]
 
 == License
 
-MIT License. Copyright 2011
+MIT License.
 
 == Kindeditor(4.x) for Rails3 中文文档
 
@@ -105,7 +105,7 @@ MIT License. Copyright 2011
 
   include_kindeditor
   或者
-  include_kindeditor :only => [:new, :edit]
+  include_kindeditor :only => [:new, :edit, :create, :update]
 
 把需要转换的textarea赋予下列id值：
 
@@ -138,14 +138,14 @@ rails_kindeditor 可以将上传文件信息记录入数据库，以便扩展应
 
 你可以有选择性地加载kindeditor的javascript：
 
-  include_kindeditor :only => [:new, :edit]
-  include_kindeditor :except => [:index, :show, :destroy, :create]
+  include_kindeditor :only => [:new, :edit, :create, :update]
+  include_kindeditor :except => [:index, :show, :destroy]
   
 你可以通过修改kindeditor-init.js来配置kindeditor，详细配置方法可以阅读Kindeditor的文档:
 
-  public/kindeditor/kindeditor-init.js [Rails3.1]
+  public/kindeditor/kindeditor-init.js [Rails3.x]
   public/javascripts/kindeditor/kindeditor-init.js [Rails3.0.x]
 
 == License
 
-MIT License. Copyright 2011
+MIT License.
