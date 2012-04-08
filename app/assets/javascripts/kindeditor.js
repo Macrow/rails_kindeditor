@@ -1,0 +1,1 @@
+//= require kindeditor/kindeditor.js

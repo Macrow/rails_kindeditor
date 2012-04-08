@@ -3,8 +3,11 @@ require "find"
 class Kindeditor::AssetsController < ApplicationController
   skip_before_filter :verify_authenticity_token
   def create
-    @imgFile = params[:imgFile]
-    @dir = params[:dir]
+    @imgFile, @dir = params[:imgFile], params[:dir]
+    if !RailsKindeditor.image_resize_to_fit.nil? && @dir == 'image'
+      Kindeditor::AssetUploader.send(:include, CarrierWave::MiniMagick)
+      Kindeditor::AssetUploader.send(:process, :resize_to_fit => RailsKindeditor.resize_to_fit)      
+    end
     unless @imgFile.nil?
       if Kindeditor::AssetUploader.save_upload_info? # save upload info into database
         begin
@@ -34,19 +37,25 @@ class Kindeditor::AssetsController < ApplicationController
   end
 
   def list
-    @root_path = Rails.public_path + "/#{Kindeditor::AssetUploader::BASE_DIR}/"
-    @root_url = "/#{Kindeditor::AssetUploader::BASE_DIR}/"
+    @root_path = "#{Rails.public_path}/#{RailsKindeditor.upload_store_dir}/"
+    @root_url = "/#{RailsKindeditor.upload_store_dir}/"
     @img_ext = Kindeditor::AssetUploader::EXT_NAMES[:image]
     @dir = params[:dir].strip || ""
     unless Kindeditor::AssetUploader::EXT_NAMES.keys.map(&:to_s).push("").include?(@dir)
       render :text => "Invalid Directory name."
       return
     end
-    unless @dir.empty?
-      @root_path += @dir + "/"
-      @root_url += @dir + "/"
-      Dir.mkdir(@root_path) unless File.exist?(@root_path)
+    
+    Dir.chdir(Rails.public_path)
+    RailsKindeditor.upload_store_dir.split('/').each do |dir|
+      Dir.mkdir(dir) unless Dir.exist?(dir)
+      Dir.chdir(dir)
     end
+    
+    Dir.mkdir(@dir) unless Dir.exist?(@dir)
+    
+    @root_path += @dir + "/"
+    @root_url += @dir + "/"
     
     @path = params[:path].strip || ""
     if @path.empty?

@@ -1,7 +1,6 @@
 source "http://rubygems.org"
 
-# Specify your gem's dependencies in rails_kindeditor.gemspec
 gemspec
 
-gem "carrierwave"
-
+gem 'carrierwave'
+gem 'mini_magick'

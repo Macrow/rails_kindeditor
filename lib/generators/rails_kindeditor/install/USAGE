@@ -1,10 +1,10 @@
 Description:
-    Copy kindeditor files into your application
+    install kindeditor for your application
 
 Example:
     rails generate rails_kindeditor:install
 
     This will create:
-        public/kindeditor
-        app/uploaders/kindeditor
+        config/kindeditor.rb
+
 

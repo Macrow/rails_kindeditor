@@ -9,6 +9,7 @@ class Kindeditor::Asset
   field :file_type, :type => String
   validates_presence_of :asset
   before_save :update_asset_attributes
+  attr_accessible :asset
 
   private
   def update_asset_attributes

@@ -2,16 +2,15 @@
 
 class Kindeditor::AssetUploader < CarrierWave::Uploader::Base
   
-  EXT_NAMES = {:image => %w[gif jpg jpeg png bmp],
-               :flash => %w[swf flv],
-               :media => %w[swf flv mp3 wav wma wmv mid avi mpg asf rm rmvb],
-               :file  => %w[doc docx xls xlsx ppt htm html txt zip rar gz bz2]}
-
-  BASE_DIR = "uploads"
+  EXT_NAMES = {:image => RailsKindeditor.upload_image_ext,
+               :flash => RailsKindeditor.upload_flash_ext,
+               :media => RailsKindeditor.upload_media_ext,
+               :file  => RailsKindeditor.upload_file_ext}
 
   # Include RMagick or ImageScience support:
   # include CarrierWave::RMagick
   # include CarrierWave::ImageScience
+  # include CarrierWave::MiniMagick
 
   # Choose what kind of storage to use for this uploader:
   storage :file
@@ -21,9 +20,9 @@ class Kindeditor::AssetUploader < CarrierWave::Uploader::Base
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
     if Kindeditor::AssetUploader.save_upload_info?
-      "#{BASE_DIR}/#{model.class.to_s.underscore.gsub(/(kindeditor\/)|(_uploader)/, '')}/#{model.created_at.strftime("%Y%m")}"
+      "#{RailsKindeditor.upload_store_dir}/#{model.class.to_s.underscore.gsub(/(kindeditor\/)|(_uploader)/, '')}/#{model.created_at.strftime("%Y%m")}"
     else
-      "#{BASE_DIR}/#{self.class.to_s.underscore.gsub(/(kindeditor\/)|(_uploader)/, '')}/#{Time.now.strftime("%Y%m")}"
+      "#{RailsKindeditor.upload_store_dir}/#{self.class.to_s.underscore.gsub(/(kindeditor\/)|(_uploader)/, '')}/#{Time.now.strftime("%Y%m")}"
     end
   end
 

@@ -15,9 +15,3 @@ module RailsKindeditor
   end
 end
 
-if defined? ActionController
-  ActionController::Base.class_eval do
-    include RailsKindeditor::ControllerAdditions
-  end
-end
-
