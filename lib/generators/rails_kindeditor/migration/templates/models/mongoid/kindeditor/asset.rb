@@ -1,7 +1,7 @@
-require 'carrierwave/orm/mongoid'       
+require 'carrierwave/mongoid'
 
 class Kindeditor::Asset 
-  self.collection_name = 'kindeditor_asset'     
+  self.collection_name = 'kindeditor_assets'
   include Mongoid::Document
   include Mongoid::Timestamps
   mount_uploader :asset
