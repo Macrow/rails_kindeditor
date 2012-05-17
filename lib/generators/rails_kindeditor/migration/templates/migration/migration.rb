@@ -10,7 +10,7 @@ class CreateKindeditorAssets < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :kindeditor_asset
+    drop_table :kindeditor_assets
   end
 end
 
