@@ -59,6 +59,8 @@ That's all.
 ### simple_form:
 
 ```ruby
+  <%= form.input :content, :as => :kindeditor %>
+  # or
   <%= form.input :content, :as => :kindeditor, :label => false, :input_html => { :width => 800, :height => 300 } %>
 ```
   
@@ -66,6 +68,7 @@ That's all.
 
 ```ruby
   <%= form.input :content, :as => :kindeditor %>
+  # or
   <%= form.input :content, :as => :kindeditor, :input_html => { :height => 300 } %>
 ```
 
@@ -86,6 +89,7 @@ You can customize some option for uploading.
   config.upload_file_ext = %w[doc docx xls xlsx ppt htm html txt zip rar gz bz2]
 
   # Porcess upload image size, need mini_magick
+  #     before    => after
   # eg: 1600x1600 => 800x800
   #     1600x800  => 800x400
   #     400x400   => 800x800
@@ -108,6 +112,12 @@ rails_kindeditor can save upload file information into database.
 
 ```bash
   rake db:migrate
+```
+
+### If you're using mongoid, please add 'gem "carrierwave-mongoid"' in your Gemfile
+
+```ruby
+  gem 'carrierwave-mongoid'
 ```
 
 ## License
@@ -202,6 +212,7 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
   config.upload_file_ext = %w[doc docx xls xlsx ppt htm html txt zip rar gz bz2]
 
   # 处理上传文件，需要mini_magick
+  #     处理以前      => 处理以后
   # eg: 1600x1600 => 800x800
   #     1600x800  => 800x400
   #     400x400   => 800x800
@@ -224,6 +235,12 @@ rails_kindeditor 可以将上传文件信息记录入数据库，以便扩展应
 
 ```bash
   rake db:migrate
+```
+
+### 如果你使用的是mongoid, 请在你的Gemfile里加入'gem "carrierwave-mongoid"'
+
+```ruby
+  gem 'carrierwave-mongoid'
 ```
 
 ## License
