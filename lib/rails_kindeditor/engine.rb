@@ -15,7 +15,7 @@ module RailsKindeditor
     
     initializer "rails_kindeditor.simple_form_and_formtastic" do
       require "rails_kindeditor/simple_form" if Object.const_defined?("SimpleForm")
-      require "ckeditor/hooks/formtastic" if Object.const_defined?("Formtastic")
+      require "rails_kindeditor/formtastic" if Object.const_defined?("Formtastic")
     end
     
     initializer "rails_kindeditor.helper_and_builder" do
