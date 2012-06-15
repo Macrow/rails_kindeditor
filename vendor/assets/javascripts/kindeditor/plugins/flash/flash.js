@@ -11,11 +11,13 @@ KindEditor.plugin('flash', function(K) {
 	var self = this, name = 'flash', lang = self.lang(name + '.'),
 		allowFlashUpload = K.undef(self.allowFlashUpload, true),
 		allowFileManager = K.undef(self.allowFileManager, false),
+		formatUploadUrl = K.undef(self.formatUploadUrl, true),
+		extraParams = K.undef(self.extraFileUploadParams, {}),
 		uploadJson = K.undef(self.uploadJson, self.basePath + 'php/upload_json.php');
 	self.plugin.flash = {
 		edit : function() {
 			var html = [
-				'<div style="padding:10px 20px;">',
+				'<div style="padding:20px;">',
 				//url
 				'<div class="ke-dialog-row">',
 				'<label for="keUrl" style="width:60px;">' + lang.url + '</label>',
@@ -40,7 +42,6 @@ KindEditor.plugin('flash', function(K) {
 			var dialog = self.createDialog({
 				name : name,
 				width : 450,
-				height : 200,
 				title : self.lang(name),
 				body : html,
 				yesBtn : {
@@ -86,11 +87,15 @@ KindEditor.plugin('flash', function(K) {
 				var uploadbutton = K.uploadbutton({
 					button : K('.ke-upload-button', div)[0],
 					fieldName : 'imgFile',
+					extraParams : extraParams,
 					url : K.addParam(uploadJson, 'dir=flash'),
 					afterUpload : function(data) {
 						dialog.hideLoading();
 						if (data.error === 0) {
-							var url = K.formatUrl(data.url, 'absolute');
+							var url = data.url;
+							if (formatUploadUrl) {
+								url = K.formatUrl(url, 'absolute');
+							}
 							urlBox.val(url);
 							if (self.afterUpload) {
 								self.afterUpload.call(self, url);
@@ -111,7 +116,6 @@ KindEditor.plugin('flash', function(K) {
 				});
 			} else {
 				K('.ke-upload-button', div).hide();
-				urlBox.width(250);
 			}
 
 			if (allowFileManager) {

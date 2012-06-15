@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.6 (2012-03-18)
+* @version 4.1.1 (2012-06-10)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.0.6 (2012-03-18)',
+var _VERSION = '4.1.1 (2012-06-10)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -226,7 +226,7 @@ K.basePath = '/assets/kindeditor/'; //_getBasePath(); ##### Modified by Macrow #
 K.options = {
 	designMode : true,
 	fullscreenMode : false,
-	filterMode : false,
+	filterMode : true,
 	wellFormatMode : true,
 	shadowMode : true,
 	loadStyleMode : true,
@@ -243,6 +243,7 @@ K.options = {
 	pasteType : 2,
 	dialogAlignType : 'page',
 	useContextmenu : true,
+	fullscreenShortcut : true,
 	bodyClass : 'ke-content',
 	indentChar : '\t',
 	cssPath : '',
@@ -251,13 +252,14 @@ K.options = {
 	minHeight : 100,
 	minChangeSize : 5,
 	items : [
-		'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'cut', 'copy', 'paste',
+		'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
 		'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
 		'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
 		'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
 		'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
-		'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image',
-		'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'map', 'code', 'pagebreak', 'anchor', 'link', 'unlink', '|', 'about'
+		'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
+		'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
+		'anchor', 'link', 'unlink', '|', 'about'
 	],
 	noDisableItems : ['source', 'fullscreen'],
 	colorTable : [
@@ -634,6 +636,7 @@ function _formatCss(css) {
 }
 function _formatUrl(url, mode, host, pathname) {
 	mode = _undef(mode, '').toLowerCase();
+	url = url.replace(/([^:])\/\//g, '$1/');
 	if (_inArray(mode, ['absolute', 'relative', 'domain']) < 0) {
 		return url;
 	}
@@ -724,7 +727,7 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 			html = html.replace(/(<(?:style|style\s[^>]*)>)([\s\S]*?)(<\/style>)/ig, '');
 		}
 	}
-	var re = /(\s*)<(\/)?([\w\-:]+)((?:\s+|(?:\s+[\w\-:]+)|(?:\s+[\w\-:]+=[^\s"'<>]+)|(?:\s+[\w\-:"]+="[^"]*")|(?:\s+[\w\-:"]+='[^']*'))*)(\/)?>(\s*)/g;
+	var re = /([ \t\n\r]*)<(\/)?([\w\-:]+)((?:\s+|(?:\s+[\w\-:]+)|(?:\s+[\w\-:]+=[^\s"'<>]+)|(?:\s+[\w\-:"]+="[^"]*")|(?:\s+[\w\-:"]+='[^']*'))*)(\/)?>([ \t\n\r]*)/g;
 	var tagStack = [];
 	html = html.replace(re, function($0, $1, $2, $3, $4, $5, $6) {
 		var full = $0,
@@ -925,6 +928,19 @@ function _mediaImg(blankPath, attrs) {
 	html += 'data-ke-tag="' + escape(srcTag) + '" alt="" />';
 	return html;
 }
+function _tmpl(str, data) {
+	var fn = new Function("obj",
+		"var p=[],print=function(){p.push.apply(p,arguments);};" +
+		"with(obj){p.push('" +
+		str.replace(/[\r\t\n]/g, " ")
+			.split("<%").join("\t")
+			.replace(/((^|%>)[^\t]*)'/g, "$1\r")
+			.replace(/\t=(.*?)%>/g, "',$1,'")
+			.split("\t").join("');")
+			.split("%>").join("p.push('")
+			.split("\r").join("\\'") + "');}return p.join('');");
+	return data ? fn(data) : fn;
+}
 K.formatUrl = _formatUrl;
 K.formatHtml = _formatHtml;
 K.getCssList = _getCssList;
@@ -934,6 +950,7 @@ K.mediaAttrs = _mediaAttrs;
 K.mediaEmbed = _mediaEmbed;
 K.mediaImg = _mediaImg;
 K.clearMsWord = _clearMsWord;
+K.tmpl = _tmpl;
 function _contains(nodeA, nodeB) {
 	if (nodeA.nodeType == 9 && nodeB.nodeType != 9) {
 		return true;
@@ -1249,10 +1266,15 @@ function KNode(node) {
 _extend(KNode, {
 	init : function(node) {
 		var self = this;
+		node = _isArray(node) ? node : [node];
+		var length = 0;
 		for (var i = 0, len = node.length; i < len; i++) {
-			self[i] = node[i].constructor === KNode ? node[i][0] : node[i];
+			if (node[i]) {
+				self[i] = node[i].constructor === KNode ? node[i][0] : node[i];
+				length++;
+			}
 		}
-		self.length = node.length;
+		self.length = length;
 		self.doc = _getDoc(self[0]);
 		self.name = _getNodeName(self[0]);
 		self.type = self.length > 0 ? self[0].nodeType : null;
@@ -1329,7 +1351,7 @@ _extend(KNode, {
 		if (this.length < 1) {
 			return null;
 		}
-		return new KNode([this[i]]);
+		return this[i] ? new KNode(this[i]) : null;
 	},
 	hasClass : function(cls) {
 		if (this.length < 1) {
@@ -1479,7 +1501,7 @@ _extend(KNode, {
 		if (this.length < 1) {
 			return new KNode([]);
 		}
-		return new KNode([this[0].cloneNode(bool)]);
+		return new KNode(this[0].cloneNode(bool));
 	},
 	append : function(expr) {
 		this.each(function() {
@@ -1601,28 +1623,28 @@ _extend(KNode, {
 			return null;
 		}
 		var node = this[0].parentNode;
-		return node ? new KNode([node]) : null;
+		return node ? new KNode(node) : null;
 	},
 	children : function() {
 		if (this.length < 1) {
-			return [];
+			return new KNode([]);
 		}
 		var list = [], child = this[0].firstChild;
 		while (child) {
 			if (child.nodeType != 3 || _trim(child.nodeValue) !== '') {
-				list.push(new KNode([child]));
+				list.push(child);
 			}
 			child = child.nextSibling;
 		}
-		return list;
+		return new KNode(list);
 	},
 	first : function() {
 		var list = this.children();
-		return list.length > 0 ? list[0] : null;
+		return list.length > 0 ? list.eq(0) : null;
 	},
 	last : function() {
 		var list = this.children();
-		return list.length > 0 ? list[list.length - 1] : null;
+		return list.length > 0 ? list.eq(list.length - 1) : null;
 	},
 	index : function() {
 		if (this.length < 1) {
@@ -1640,14 +1662,14 @@ _extend(KNode, {
 			return null;
 		}
 		var node = this[0].previousSibling;
-		return node ? new KNode([node]) : null;
+		return node ? new KNode(node) : null;
 	},
 	next : function() {
 		if (this.length < 1) {
 			return null;
 		}
 		var node = this[0].nextSibling;
-		return node ? new KNode([node]) : null;
+		return node ? new KNode(node) : null;
 	},
 	scan : function(fn, order) {
 		if (this.length < 1) {
@@ -2095,7 +2117,7 @@ _extend(KRange, {
 		}
 		var children = knode.children();
 		if (children.length > 0) {
-			return this.setStartBefore(children[0][0]).setEndAfter(children[children.length - 1][0]);
+			return this.setStartBefore(children[0]).setEndAfter(children[children.length - 1]);
 		}
 		return this.setStart(node, 0).setEnd(node, 0);
 	},
@@ -2281,10 +2303,10 @@ _extend(KRange, {
 			}
 			var left, right, child, offset;
 			if (pos > 0) {
-				left = children[pos - 1];
+				left = children.eq(pos - 1);
 			}
 			if (pos < children.length) {
-				right = children[pos];
+				right = children.eq(pos);
 			}
 			if (left && left.type == 3) {
 				child = left[0];
@@ -3454,9 +3476,14 @@ function _iframeDoc(iframe) {
 	iframe = _get(iframe);
 	return iframe.contentDocument || iframe.contentWindow.document;
 }
+var html, _direction = '';
+if ((html = document.getElementsByTagName('html'))) {
+	_direction = html[0].dir;
+}
 function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 	var arr = [
-		'<html><head><meta charset="utf-8" /><title>KindEditor</title>',
+		(_direction === '' ? '<html>' : '<html dir="' + _direction + '">'),
+		'<head><meta charset="utf-8" /><title></title>',
 		'<style>',
 		'html {margin:0;padding:0;}',
 		'body {margin:0;padding:5px;}',
@@ -3465,6 +3492,7 @@ function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 		'p {margin:5px 0;}',
 		'table {border-collapse:collapse;}',
 		'img {border:0;}',
+		'noscript {display:none;}',
 		'table.ke-zeroborder td {border:1px dotted #AAA;}',
 		'img.ke-flash {',
 		'	border:1px solid #AAA;',
@@ -3495,7 +3523,7 @@ function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 		'	width:16px;',
 		'	height:16px;',
 		'}',
-		'.ke-script {',
+		'.ke-script, .ke-noscript {',
 		'	display:none;',
 		'	font-size:0;',
 		'	width:0;',
@@ -4037,27 +4065,34 @@ _extend(KUploadButton, {
 			fieldName = options.fieldName || 'file',
 			url = options.url || '',
 			title = button.val(),
+			extraParams = options.extraParams || {},
 			cls = button[0].className || '',
-			target = 'kindeditor_upload_iframe_' + new Date().getTime();
+			target = options.target || 'kindeditor_upload_iframe_' + new Date().getTime();
 		options.afterError = options.afterError || function(str) {
 			alert(str);
 		};
+		var hiddenElements = [];
+		for(var k in extraParams){
+			hiddenElements.push('<input type="hidden" name="' + k + '" value="' + extraParams[k] + '" />');
+		}
 		var html = [
 			'<div class="ke-inline-block ' + cls + '">',
-			'<iframe name="' + target + '" style="display:none;"></iframe>',
-			'<form class="ke-upload-area ke-form" method="post" enctype="multipart/form-data" target="' + target + '" action="' + url + '">',
+			(options.target ? '' : '<iframe name="' + target + '" style="display:none;"></iframe>'),
+			(options.form ? '<div class="ke-upload-area">' : '<form class="ke-upload-area ke-form" method="post" enctype="multipart/form-data" target="' + target + '" action="' + url + '">'),
 			'<span class="ke-button-common">',
+			hiddenElements.join(''),
 			'<input type="button" class="ke-button-common ke-button" value="' + title + '" />',
 			'</span>',
 			'<input type="file" class="ke-upload-file" name="' + fieldName + '" tabindex="-1" />',
-			'</form></div>'].join('');
+			(options.form ? '</div>' : '</form>'),
+			'</div>'].join('');
 		var div = K(html, button.doc);
 		button.hide();
 		button.before(div);
 		self.div = div;
 		self.button = button;
-		self.iframe = K('iframe', div);
-		self.form = K('form', div);
+		self.iframe = options.target ? K('iframe[name="' + target + '"]') : K('iframe', div);
+		self.form = options.form ? K(options.form) : K('form', div);
 		var width = options.width || K('.ke-button-common', div).width();
 		self.fileBox = K('.ke-upload-file', div).width(width);
 		self.options = options;
@@ -4195,6 +4230,7 @@ _extend(KDialog, KWidget, {
 		self.footerDiv = footerDiv;
 		self.bodyDiv = bodyDiv;
 		self.headerDiv = headerDiv;
+		self.isLoading = false;
 	},
 	setMaskIndex : function(z) {
 		var self = this;
@@ -4207,11 +4243,13 @@ _extend(KDialog, KWidget, {
 			.width(body.width()).height(body.height())
 			.css('top', self.headerDiv.height() + 'px');
 		body.css('visibility', 'hidden').after(self.loading);
+		self.isLoading = true;
 		return self;
 	},
 	hideLoading : function() {
 		this.loading && this.loading.remove();
 		this.bodyDiv.css('visibility', 'visible');
+		this.isLoading = false;
 		return this;
 	},
 	remove : function() {
@@ -4490,7 +4528,7 @@ function _bindNewlineEvent() {
 	if (_GECKO && _V < 3 && newlineTag !== 'p') {
 		return;
 	}
-	if (_OPERA) {
+	if (_OPERA && _V < 9) {
 		return;
 	}
 	var brSkipTagMap = _toMap('h1,h2,h3,h4,h5,h6,pre,li'),
@@ -4516,7 +4554,7 @@ function _bindNewlineEvent() {
 		}
 		if (newlineTag === 'br' && !brSkipTagMap[tagName]) {
 			e.preventDefault();
-			self.insertHtml('<br />');
+			self.insertHtml('<br />' + (_IE && _V < 9 ? '' : '\u200B'));
 			return;
 		}
 		if (!pSkipTagMap[tagName]) {
@@ -4650,6 +4688,13 @@ function KEditor(options) {
 			setOption(key, val);
 		}
 	});
+	var se = K(self.srcElement || '<textarea/>');
+	if (!self.width) {
+		self.width = se[0].style.width || se.width();
+	}
+	if (!self.height) {
+		self.height = se[0].style.height || se.height();
+	}
 	setOption('width', _undef(self.width, self.minWidth));
 	setOption('height', _undef(self.height, self.minHeight));
 	setOption('width', _addUnit(self.width));
@@ -4657,7 +4702,6 @@ function KEditor(options) {
 	if (_MOBILE && (!_IOS || _V < 534)) {
 		self.designMode = false;
 	}
-	var se = K(self.srcElement || '<textarea/>');
 	self.srcElement = se;
 	self.initContent = '';
 	self.plugin = {};
@@ -5251,6 +5295,7 @@ KEditor.prototype = {
 function _editor(options) {
 	return new KEditor(options);
 }
+_instances = [];
 function _create(expr, options) {
 	options = options || {};
 	options.basePath = _undef(options.basePath, K.basePath);
@@ -5272,19 +5317,20 @@ function _create(expr, options) {
 	if (!knode) {
 		return;
 	}
+	if (knode.length > 1) {
+		knode.each(function() {
+			_create(this, options);
+		});
+		return _instances[0];
+	}
 	options.srcElement = knode[0];
-	if (!options.width) {
-		options.width = knode[0].style.width || knode.width();
-	}
-	if (!options.height) {
-		options.height = knode[0].style.height || knode.height();
-	}
 	var editor = new KEditor(options);
+	_instances.push(editor);
 	if (_language[editor.langType]) {
 		return create(editor);
 	}
 	_loadScript(editor.langPath + editor.langType + '.js?ver=' + encodeURIComponent(K.DEBUG ? _TIME : _VERSION), function() {
-		return create(editor);
+		create(editor);
 	});
 	return editor;
 }
@@ -5294,6 +5340,7 @@ if (_IE && _V < 7) {
 K.EditorClass = KEditor;
 K.editor = _editor;
 K.create = _create;
+K.instances = _instances;
 K.plugin = _plugin;
 K.lang = _lang;
 _plugin('core', function(K) {
@@ -5355,25 +5402,27 @@ _plugin('core', function(K) {
 	self.clickToolbar('fullscreen', function() {
 		self.fullscreen();
 	});
-	var loaded = false;
-	self.afterCreate(function() {
-		K(self.edit.doc, self.edit.textarea).keyup(function(e) {
-			if (e.which == 27) {
-				setTimeout(function() {
-					self.fullscreen();
-				}, 0);
+	if (self.fullscreenShortcut) {
+		var loaded = false;
+		self.afterCreate(function() {
+			K(self.edit.doc, self.edit.textarea).keyup(function(e) {
+				if (e.which == 27) {
+					setTimeout(function() {
+						self.fullscreen();
+					}, 0);
+				}
+			});
+			if (loaded) {
+				if (_IE && !self.designMode) {
+					return;
+				}
+				self.focus();
+			}
+			if (!loaded) {
+				loaded = true;
 			}
 		});
-		if (loaded) {
-			if (_IE && !self.designMode) {
-				return;
-			}
-			self.focus();
-		}
-		if (!loaded) {
-			loaded = true;
-		}
-	});
+	}
 	_each('undo,redo'.split(','), function(i, name) {
 		if (shortcutKeys[name]) {
 			self.afterCreate(function() {
@@ -5575,6 +5624,12 @@ _plugin('core', function(K) {
 					K(this).after('<br />').remove(true);
 				});
 				K('span.Apple-style-span', div).remove(true);
+				K('span.Apple-tab-span', div).remove(true);
+				K('span[style]', div).each(function() {
+					if (K(this).css('white-space') == 'nowrap') {
+						K(this).remove(true);
+					}
+				});
 				K('meta', div).remove();
 			}
 			var html = div[0].innerHTML;
@@ -5646,7 +5701,10 @@ _plugin('core', function(K) {
 		});
 	});
 	self.beforeGetHtml(function(html) {
-		return html.replace(/<img[^>]*class="?ke-(flash|rm|media)"?[^>]*>/ig, function(full) {
+		return html.replace(/(<(?:noscript|noscript\s[^>]*)>)([\s\S]*?)(<\/noscript>)/ig, function($0, $1, $2, $3) {
+			return $1 + _unescape($2).replace(/\s+/g, ' ') + $3;
+		})
+		.replace(/<img[^>]*class="?ke-(flash|rm|media)"?[^>]*>/ig, function(full) {
 			var imgAttrs = _getAttrList(full),
 				styles = _getCssList(imgAttrs.style || ''),
 				attrs = _mediaAttrs(imgAttrs['data-ke-tag']);
@@ -5660,6 +5718,9 @@ _plugin('core', function(K) {
 		})
 		.replace(/<div\s+[^>]*data-ke-script-attr="([^"]*)"[^>]*>([\s\S]*?)<\/div>/ig, function(full, attr, code) {
 			return '<script' + unescape(attr) + '>' + unescape(code) + '</script>';
+		})
+		.replace(/<div\s+[^>]*data-ke-noscript-attr="([^"]*)"[^>]*>([\s\S]*?)<\/div>/ig, function(full, attr, code) {
+			return '<noscript' + unescape(attr) + '>' + unescape(code) + '</noscript>';
 		})
 		.replace(/(<[^>]*)data-ke-src="([^"]*)"([^>]*>)/ig, function(full, start, src, end) {
 			full = full.replace(/(\s+(?:href|src)=")[^"]*(")/i, '$1' + src + '$2');
@@ -5687,6 +5748,9 @@ _plugin('core', function(K) {
 		})
 		.replace(/<script([^>]*)>([\s\S]*?)<\/script>/ig, function(full, attr, code) {
 			return '<div class="ke-script" data-ke-script-attr="' + escape(attr) + '">' + escape(code) + '</div>';
+		})
+		.replace(/<noscript([^>]*)>([\s\S]*?)<\/noscript>/ig, function(full, attr, code) {
+			return '<div class="ke-noscript" data-ke-noscript-attr="' + escape(attr) + '">' + escape(code) + '</div>';
 		})
 		.replace(/(<[^>]*)(href|src)="([^"]*)"([^>]*>)/ig, function(full, start, key, src, end) {
 			if (full.match(/\sdata-ke-src="[^"]*"/i)) {

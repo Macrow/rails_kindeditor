@@ -68,7 +68,7 @@ class Kindeditor::AssetUploader < CarrierWave::Uploader::Base
   end
 
   def filename
-    @name ||= Time.now.to_s(:number)
+    @name ||= "#{Time.now.to_s(:number)}#{rand(100000)}"
     "#{@name}#{File.extname(original_filename).downcase}" if original_filename
   end
   

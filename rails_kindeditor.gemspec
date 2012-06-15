@@ -19,6 +19,5 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency("carrierwave")
-  # s.add_dependency("carrierwave-mongoid")
   s.add_dependency("mini_magick")
 end
