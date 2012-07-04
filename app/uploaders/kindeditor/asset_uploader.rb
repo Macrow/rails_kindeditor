@@ -68,8 +68,10 @@ class Kindeditor::AssetUploader < CarrierWave::Uploader::Base
   end
 
   def filename
-    @name ||= "#{Time.now.to_s(:number)}#{rand(100000)}"
-    "#{@name}#{File.extname(original_filename).downcase}" if original_filename
+    if original_filename 
+      @name ||= Digest::MD5.hexdigest(File.dirname(current_path)).slice(0, 12)
+      "#{@name}.#{file.extension}"
+    end
   end
   
   def self.save_upload_info?
