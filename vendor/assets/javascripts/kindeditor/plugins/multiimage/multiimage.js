@@ -57,6 +57,7 @@ K.extend(KSWFUpload, {
 			file_types_description : options.fileTypesDesc,
 			file_upload_limit : options.fileUploadLimit,
 			file_size_limit : options.fileSizeLimit,
+			post_params : options.postParams,
 			file_queued_handler : function(file) {
 				file.url = self.options.fileIconUrl;
 				self.appendFile(file);
@@ -113,7 +114,7 @@ K.extend(KSWFUpload, {
 					return;
 				}
 				file.url = data.url;
-				K('.ke-img', itemDiv).attr('src', file.url).attr('data-status', file.filestatus);
+				K('.ke-img', itemDiv).attr('src', file.url).attr('data-status', file.filestatus).data('data', data);
 				K('.ke-status > div', itemDiv).hide();
 			}
 		};
@@ -127,10 +128,9 @@ K.extend(KSWFUpload, {
 		var list = [];
 		K('.ke-img', self.bodyDiv).each(function() {
 			var img = K(this);
-			var url = img.attr('src');
 			var status = img.attr('data-status');
 			if (status == SWFUpload.FILE_STATUS.COMPLETE) {
-				list.push(url);
+				list.push(img.data('data'));
 			}
 		});
 		return list;
@@ -203,6 +203,7 @@ KindEditor.plugin('multiimage', function(K) {
 		imageSizeLimit = K.undef(self.imageSizeLimit, '1MB'),
 		imageFileTypes = K.undef(self.imageFileTypes, '*.jpg;*.gif;*.png'),
 		imageUploadLimit = K.undef(self.imageUploadLimit, 20),
+		filePostName = K.undef(self.filePostName, 'imgFile'),
 		lang = self.lang(name + '.');
 
 	self.plugin.multiImageDialog = function(options) {
@@ -248,11 +249,12 @@ KindEditor.plugin('multiimage', function(K) {
 			startButtonValue : lang.startUpload,
 			uploadUrl : K.addParam(uploadJson, 'dir=image'),
 			flashUrl : imgPath + 'swfupload.swf',
-			filePostName : 'imgFile',
+			filePostName : filePostName,
 			fileTypes : '*.jpg;*.jpeg;*.gif;*.png;*.bmp',
 			fileTypesDesc : 'Image Files',
 			fileUploadLimit : imageUploadLimit,
 			fileSizeLimit : imageSizeLimit,
+			postParams :  K.undef(self.extraFileUploadParams, {}),
 			queueLimitExceeded : lang.queueLimitExceeded,
 			fileExceedsSizeLimit : lang.fileExceedsSizeLimit,
 			zeroByteFile : lang.zeroByteFile,
@@ -273,11 +275,12 @@ KindEditor.plugin('multiimage', function(K) {
 				if (urlList.length === 0) {
 					return;
 				}
-				var html = '';
-				K.each(urlList, function(i, url) {
-					html += '<img src="' + K.escape(url) + '" data-ke-src="' + K.escape(url) + '" alt="" /><br />';
+				K.each(urlList, function(i, data) {
+					if (self.afterUpload) {
+						self.afterUpload.call(self, data.url, data, 'multiimage');
+					}
+					self.exec('insertimage', data.url, data.title, data.width, data.height, data.border, data.align);
 				});
-				self.insertHtml(html);
 				// Bugfix: [Firefox] 上传图片后，总是出现正在加载的样式，需要延迟执行hideDialog
 				setTimeout(function() {
 					self.hideDialog().focus();
@@ -305,13 +308,16 @@ KindEditor.plugin('multiimage', function(K) {
 /* ******************* */
 /* Constructor & Init  */
 /* ******************* */
-var SWFUpload;
 
-if (SWFUpload == undefined) {
-	SWFUpload = function (settings) {
-		this.initSWFUpload(settings);
-	};
+(function() {
+
+if (window.SWFUpload) {
+	return;
 }
+
+window.SWFUpload = function (settings) {
+	this.initSWFUpload(settings);
+};
 
 SWFUpload.prototype.initSWFUpload = function (settings) {
 	try {
@@ -1366,3 +1372,5 @@ if (typeof(SWFUpload) === "function") {
 		}
 	};
 }
+
+})();
