@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.2 (2012-07-21)
+* @version 4.1.3 (2012-10-14)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.2 (2012-07-21)',
+var _VERSION = '4.1.3 (2012-10-14)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -75,7 +75,7 @@ function _inString(val, str, delimiter) {
 }
 function _addUnit(val, unit) {
 	unit = unit || 'px';
-	return val && /^\d+$/.test(val) ? val + 'px' : val;
+	return val && /^\d+$/.test(val) ? val + unit : val;
 }
 function _removeUnit(val) {
 	var match;
@@ -270,37 +270,38 @@ K.options = {
 	],
 	fontSizeTable : ['9px', '10px', '12px', '14px', '16px', '18px', '24px', '32px'],
 	htmlTags : {
-		font : ['color', 'size', 'face', '.background-color'],
+		font : ['id', 'class', 'color', 'size', 'face', '.background-color'],
 		span : [
-			'.color', '.background-color', '.font-size', '.font-family', '.background',
+			'id', 'class', '.color', '.background-color', '.font-size', '.font-family', '.background',
 			'.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.line-height'
 		],
 		div : [
-			'align', '.border', '.margin', '.padding', '.text-align', '.color',
+			'id', 'class', 'align', '.border', '.margin', '.padding', '.text-align', '.color',
 			'.background-color', '.font-size', '.font-family', '.font-weight', '.background',
 			'.font-style', '.text-decoration', '.vertical-align', '.margin-left'
 		],
 		table: [
-			'border', 'cellspacing', 'cellpadding', 'width', 'height', 'align', 'bordercolor',
+			'id', 'class', 'border', 'cellspacing', 'cellpadding', 'width', 'height', 'align', 'bordercolor',
 			'.padding', '.margin', '.border', 'bgcolor', '.text-align', '.color', '.background-color',
 			'.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.background',
 			'.width', '.height', '.border-collapse'
 		],
 		'td,th': [
-			'align', 'valign', 'width', 'height', 'colspan', 'rowspan', 'bgcolor',
+			'id', 'class', 'align', 'valign', 'width', 'height', 'colspan', 'rowspan', 'bgcolor',
 			'.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight',
 			'.font-style', '.text-decoration', '.vertical-align', '.background', '.border'
 		],
-		a : ['href', 'target', 'name'],
-		embed : ['src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
-		img : ['src', 'width', 'height', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
+		a : ['id', 'class', 'href', 'target', 'name'],
+		embed : ['id', 'class', 'src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
+		img : ['id', 'class', 'src', 'width', 'height', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
 		'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
-			'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
+			'id', 'class', 'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
 			'.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.text-indent', '.margin-left'
 		],
-		pre : ['class'],
-		hr : ['class', '.page-break-after'],
-		'br,tbody,tr,strong,b,sub,sup,em,i,u,strike,s,del' : []
+		pre : ['id', 'class'],
+		hr : ['id', 'class', '.page-break-after'],
+		'br,tbody,tr,strong,b,sub,sup,em,i,u,strike,s,del' : ['id', 'class'],
+		iframe : ['id', 'class', 'src', 'frameborder', 'width', 'height', '.width', '.height']
 	},
 	layout : '<div class="container"><div class="toolbar"></div><div class="edit"></div><div class="statusbar"></div></div>'
 };
@@ -3280,13 +3281,14 @@ function _drag(options) {
 	var docs = [document];
 	if (iframeFix) {
 		K('iframe').each(function() {
+			var src = _formatUrl(this.src || '', 'absolute');
+			if (/^https?:\/\//.test(src)) {
+				return;
+			}
 			var doc;
 			try {
 				doc = _iframeDoc(this);
-				K(doc);
-			} catch(e) {
-				doc = null;
-			}
+			} catch(e) {}
 			if (doc) {
 				var pos = K(this).pos();
 				K(doc).data('pos-x', pos.x);
@@ -4826,6 +4828,10 @@ KEditor.prototype = {
 		if (self.isCreated) {
 			return self;
 		}
+		if (self.srcElement.data('kindeditor')) {
+			return self;
+		}
+		self.srcElement.data('kindeditor', 'true');
 		if (fullscreenMode) {
 			_docElement().style.overflow = 'hidden';
 		} else {
@@ -5044,6 +5050,7 @@ KEditor.prototype = {
 			return self;
 		}
 		self.beforeRemove();
+		self.srcElement.data('kindeditor', '');
 		if (self.menu) {
 			self.hideMenu();
 		}
@@ -5068,7 +5075,7 @@ KEditor.prototype = {
 				self.container.css('width', _addUnit(width));
 			}
 		}
-		if (height !== null) {
+		if (height !== null && self.toolbar.div && self.statusbar) {
 			height = _removeUnit(height) - self.toolbar.div.height() - self.statusbar.height();
 			if (height > 0 && _removeUnit(height) > self.minHeight) {
 				self.edit.setHeight(height);
@@ -5763,7 +5770,9 @@ _plugin('core', function(K) {
 			return '<noscript' + unescape(attr) + '>' + unescape(code) + '</noscript>';
 		})
 		.replace(/(<[^>]*)data-ke-src="([^"]*)"([^>]*>)/ig, function(full, start, src, end) {
-			full = full.replace(/(\s+(?:href|src)=")[^"]*(")/i, '$1' + src + '$2');
+			full = full.replace(/(\s+(?:href|src)=")[^"]*(")/i, function($0, $1, $2) {
+				return $1 + unescape(src) + $2;
+			});
 			full = full.replace(/\s+data-ke-src="[^"]*"/i, '');
 			return full;
 		})
@@ -5796,7 +5805,7 @@ _plugin('core', function(K) {
 			if (full.match(/\sdata-ke-src="[^"]*"/i)) {
 				return full;
 			}
-			full = start + key + '="' + src + '"' + ' data-ke-src="' + src + '"' + end;
+			full = start + key + '="' + src + '"' + ' data-ke-src="' + escape(src) + '"' + end;
 			return full;
 		})
 		.replace(/(<[^>]+\s)(on\w+="[^"]*"[^>]*>)/ig, function(full, start, end) {

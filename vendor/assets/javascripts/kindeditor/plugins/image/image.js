@@ -184,7 +184,6 @@ KindEditor.plugin('image', function(K) {
 		var uploadbutton = K.uploadbutton({
 			button : K('.ke-upload-button', div)[0],
 			fieldName : filePostName,
-			url : K.addParam(uploadJson, 'dir=image'),
 			form : K('.ke-form', div),
 			target : target,
 			width: 60,
@@ -277,7 +276,7 @@ KindEditor.plugin('image', function(K) {
 				return false;
 			}
 		});
-		if (tabIndex === 0) {
+		if (showRemote && tabIndex === 0) {
 			urlBox[0].focus();
 			urlBox[0].select();
 		}

@@ -9,10 +9,6 @@ module RailsKindeditor
       app.config.assets.precompile += RailsKindeditor.assets
     end
     
-    initializer "rails_kindeditor.methods" do
-      ActionController::Base.send(:include, RailsKindeditor::ControllerAdditions)
-    end
-    
     initializer "rails_kindeditor.simple_form_and_formtastic" do
       require "rails_kindeditor/simple_form" if Object.const_defined?("SimpleForm")
       require "rails_kindeditor/formtastic" if Object.const_defined?("Formtastic")
