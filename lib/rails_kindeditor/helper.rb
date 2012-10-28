@@ -22,36 +22,19 @@ module RailsKindeditor
     private
     def js_replace(dom_id, options = {})
       js_options = get_options(options)
+      js_options.merge(:uploadJson => '/kindeditor/upload', :fileManagerJson => '/kindeditor/filemanager')
       "KindEditor.ready(function(K){
-      	K.create('##{dom_id}', {
-      		#{js_options},
-      		uploadJson: '/kindeditor/upload',
-      		fileManagerJson: '/kindeditor/filemanager'
-      	});
+      	K.create('##{dom_id}', #{js_options.to_json});
       });"
     end
 
     def get_options(options)
-      str = []
       options.delete(:uploadJson)
       options.delete(:fileManagerJson)
       options.reverse_merge!(:width => '100%')
       options.reverse_merge!(:height => 300)
       options.reverse_merge!(:allowFileManager => true)
-      options.each do |key, value|
-        item = case value
-          when String then
-            value.split(//).first == '^' ? value.slice(1..-1) : "'#{value}'"
-          when Hash then
-            "{ #{get_options(value)} }"
-          when Array then 
-            arr = value.collect { |v| "'#{v}'" }
-            "[ #{arr.join(',')} ]"
-          else value
-        end
-        str << %Q{"#{key}": #{item}}
-      end
-      str.sort.join(',')
+      options
     end
   end
   
