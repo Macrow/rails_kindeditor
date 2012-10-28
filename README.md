@@ -13,7 +13,7 @@ Deprecation: rails_kindeditor ~> v0.3.0 only support Rails3.1+!(include Rails3.1
 ### Add this to your Gemfile
 
 ```ruby
-  gem 'rails_kindeditor', '~> 0.3.0'
+  gem 'rails_kindeditor', '~> 0.3.8'
 ```
 
 ### Run "bundle" command.
@@ -50,6 +50,17 @@ Deprecation: rails_kindeditor ~> v0.3.0 only support Rails3.1+!(include Rails3.1
        # or <%= f.kindeditor :content, :allowFileManager => false %>
        ...
      <% end -%>
+```
+You can use kindeditor's initial parameters as usual, please visit http://www.kindsoft.net/docs/option.html for details.
+
+additionally, rails_kindeditor provides one "simple_mode" parameter for render simple mode quickly.
+
+<img src="https://github.com/Macrow/rails_kindeditor/raw/master/screenshots/rails_kindeditor.png" alt="rails_indeditor">
+
+```ruby
+  kindeditor_tag :content, 'default content value', :simple_mode => true
+  f.kindeditor_tag :content, :simple_mode => true
+  f.input :content, :as => :kindeditor, :input_html => { :simple_mode => true } # simple_form & formtastic
 ```
 
 That's all.
@@ -176,6 +187,15 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
        # or <%= f.kindeditor :content, :allowFileManager => false %>
        ...
      <% end -%>
+```
+你可以向往常那样使用kindeditor自身的初始化参数，请访问 http://www.kindsoft.net/docs/option.html 查看更多参数。
+
+另外，rails_kindeditor还额外提供一个"simple_mode"参数，以便快捷使用简单模式的kindeditor。
+
+```ruby
+  kindeditor_tag :content, 'default content value', :simple_mode => true
+  f.kindeditor_tag :content, :simple_mode => true
+  f.input :content, :as => :kindeditor, :input_html => { :simple_mode => true } # simple_form & formtastic  
 ```
      
 完毕！

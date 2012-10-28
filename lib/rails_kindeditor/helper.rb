@@ -21,10 +21,8 @@ module RailsKindeditor
     
     private
     def js_replace(dom_id, options = {})
-      js_options = get_options(options)
-      js_options.merge(:uploadJson => '/kindeditor/upload', :fileManagerJson => '/kindeditor/filemanager')
       "KindEditor.ready(function(K){
-      	K.create('##{dom_id}', #{js_options.to_json});
+      	K.create('##{dom_id}', #{get_options(options).to_json});
       });"
     end
 
@@ -34,8 +32,14 @@ module RailsKindeditor
       options.reverse_merge!(:width => '100%')
       options.reverse_merge!(:height => 300)
       options.reverse_merge!(:allowFileManager => true)
+      options.merge!(:uploadJson => '/kindeditor/upload')
+      options.merge!(:fileManagerJson => '/kindeditor/filemanager')
+      if options[:simple_mode] == true
+        options.delete(:simple_mode)
+        options.merge!(:items => %w{fontname fontsize | forecolor hilitecolor bold italic underline removeformat | justifyleft justifycenter justifyright insertorderedlist insertunorderedlist | emoticons image link})
+      end
       options
-    end
+    end    
   end
   
   module Builder
