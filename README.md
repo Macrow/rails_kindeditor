@@ -28,12 +28,6 @@ Deprecation: rails_kindeditor ~> v0.3.0 only support Rails3.1+!(include Rails3.1
   rails generate rails_kindeditor:install
 ```
 
-### Include kindeditor javascripts for assets pipeline in your application.js:
-
-```ruby
-  //= require kindeditor
-```
-
 ### Usage:
 
 ```ruby
@@ -103,8 +97,8 @@ You can customize some option for uploading.
   #     before    => after
   # eg: 1600x1600 => 800x800
   #     1600x800  => 800x400
-  #     400x400   => 800x800
-  # config.image_resize_to_fit = [800, 800]
+  #     400x400   => 400x400 # No Change
+  # config.image_resize_to_limit = [800, 800]
 ```
 
 ## Save upload file information into database(optional)
@@ -163,12 +157,6 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
 
 ```bash
   rails generate rails_kindeditor:install
-```
-
-### 在application.js里面为assets pipeline加入以下代码:
-
-```ruby
-  //= require kindeditor
 ```
 
 ### 使用方法:
@@ -235,8 +223,8 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
   #     处理以前      => 处理以后
   # eg: 1600x1600 => 800x800
   #     1600x800  => 800x400
-  #     400x400   => 800x800
-  # config.image_resize_to_fit = [800, 800]
+  #     400x400   => 400x400 # 图片小于该限制尺寸则不作处理
+  # config.image_resize_to_limit = [800, 800]
 ```
 
 ## 将上传文件信息记录入数据库（可选）

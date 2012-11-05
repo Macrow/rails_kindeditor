@@ -20,7 +20,7 @@ module RailsKindeditor
   mattr_accessor :upload_file_ext
   @@upload_file_ext = %w[doc docx xls xlsx ppt htm html txt zip rar gz bz2]
   
-  mattr_accessor :image_resize_to_fit
+  mattr_accessor :image_resize_to_limit
   
   def self.root_path
     @root_path ||= Pathname.new(File.dirname(File.expand_path('../', __FILE__)))
@@ -39,9 +39,9 @@ module RailsKindeditor
     dirs.join('/')
   end
   
-  def self.resize_to_fit
-    if !image_resize_to_fit.nil? && image_resize_to_fit.is_a?(Array)
-      [image_resize_to_fit[0], image_resize_to_fit[1]]
+  def self.resize_to_limit
+    if !image_resize_to_limit.nil? && image_resize_to_limit.is_a?(Array)
+      [image_resize_to_limit[0], image_resize_to_limit[1]]
     else
       [800, 800]
     end

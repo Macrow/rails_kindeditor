@@ -11,5 +11,13 @@ module RailsKindeditor
         template "rails_kindeditor.rb", "config/initializers/rails_kindeditor.rb"
       end
     end
+    
+    def insert_or_copy_js_files
+      if File.exist?('app/assets/javascripts/application.js')
+        insert_into_file "app/assets/javascripts/application.js", "//= require kindeditor\n", :after => "jquery_ujs\n"
+      else
+        copy_file "application.js", "app/assets/javascripts/application.js"
+      end
+    end
   end
 end
