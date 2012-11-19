@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.3 (2012-10-14)
+* @version 4.1.4 (2012-11-11)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.3 (2012-10-14)',
+var _VERSION = '4.1.4 (2012-11-11)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -250,7 +250,7 @@ K.options = {
 	cssData : '',
 	minWidth : 650,
 	minHeight : 100,
-	minChangeSize : 5,
+	minChangeSize : 50,
 	items : [
 		'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
 		'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
@@ -3563,7 +3563,15 @@ function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 	return arr.join('\n');
 }
 function _elementVal(knode, val) {
-	return knode.hasVal() ? knode.val(val) : knode.html(val);
+	if (knode.hasVal()) {
+		if (val === undefined) {
+			var html = knode.val();
+			html = html.replace(/(<(?:p|p\s[^>]*)>) *(<\/p>)/ig, '');
+			return html;
+		}
+		return knode.val(val);
+	}
+	return knode.html(val);
 }
 function KEdit(options) {
 	this.init(options);
@@ -4180,6 +4188,7 @@ _extend(KDialog, KWidget, {
 		var shadowMode = _undef(options.shadowMode, true);
 		options.z = options.z || 811213;
 		options.shadowMode = false;
+		options.autoScroll = _undef(options.autoScroll, true);
 		KDialog.parent.init.call(self, options);
 		var title = options.title,
 			body = K(options.body, self.doc),
@@ -4587,6 +4596,13 @@ function _bindNewlineEvent() {
 			return;
 		}
 		if (_GECKO) {
+			var root = self.cmd.commonAncestor('p');
+			var a = self.cmd.commonAncestor('a');
+			if (a.text() == '') {
+				a.remove(true);
+				self.cmd.range.selectNodeContents(root[0]).collapse(true);
+				self.cmd.select();
+			}
 			return;
 		}
 		self.cmd.selection();
@@ -5179,7 +5195,7 @@ KEditor.prototype = {
 			html = _removeTempTag(body.innerHTML), bookmark;
 		if (checkSize && self._undoStack.length > 0) {
 			var prev = self._undoStack[self._undoStack.length - 1];
-			if (Math.abs(html.length -  _removeBookmarkTag(prev.html).length) < self.minChangeSize) {
+			if (Math.abs(html.length - _removeBookmarkTag(prev.html).length) < self.minChangeSize) {
 				return self;
 			}
 		}
@@ -5255,7 +5271,6 @@ KEditor.prototype = {
 	},
 	createDialog : function(options) {
 		var self = this, name = options.name;
-		options.autoScroll = _undef(options.autoScroll, true);
 		options.shadowMode = _undef(options.shadowMode, self.shadowMode);
 		options.closeBtn = _undef(options.closeBtn, {
 			name : self.lang('close'),
@@ -5771,7 +5786,7 @@ _plugin('core', function(K) {
 		})
 		.replace(/(<[^>]*)data-ke-src="([^"]*)"([^>]*>)/ig, function(full, start, src, end) {
 			full = full.replace(/(\s+(?:href|src)=")[^"]*(")/i, function($0, $1, $2) {
-				return $1 + unescape(src) + $2;
+				return $1 + _unescape(src) + $2;
 			});
 			full = full.replace(/\s+data-ke-src="[^"]*"/i, '');
 			return full;
@@ -5805,7 +5820,7 @@ _plugin('core', function(K) {
 			if (full.match(/\sdata-ke-src="[^"]*"/i)) {
 				return full;
 			}
-			full = start + key + '="' + src + '"' + ' data-ke-src="' + escape(src) + '"' + end;
+			full = start + key + '="' + src + '"' + ' data-ke-src="' + _escape(src) + '"' + end;
 			return full;
 		})
 		.replace(/(<[^>]+\s)(on\w+="[^"]*"[^>]*>)/ig, function(full, start, end) {
