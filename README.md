@@ -13,7 +13,7 @@ Deprecation: rails_kindeditor ~> v0.3.0 only support Rails3.1+!(include Rails3.1
 ### Add this to your Gemfile
 
 ```ruby
-  gem 'rails_kindeditor', '~> 0.3.10'
+  gem 'rails_kindeditor', '~> 0.3.11'
 ```
 
 ### Run "bundle" command.
@@ -144,7 +144,7 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
 ### 将下面代码加入Gemfile：
 
 ```ruby
-  gem 'rails_kindeditor', '~> 0.3.10'
+  gem 'rails_kindeditor', '~> 0.3.11'
 ```
 
 ### 运行"bundle"命令：
