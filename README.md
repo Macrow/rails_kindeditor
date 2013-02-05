@@ -13,7 +13,7 @@ Deprecation: rails_kindeditor ~> v0.3.0 only support Rails3.1+!(include Rails3.1
 ### Add this to your Gemfile
 
 ```ruby
-  gem 'rails_kindeditor', '~> 0.3.11'
+  gem 'rails_kindeditor', '~> 0.3.12'
 ```
 
 ### Run "bundle" command.
@@ -37,13 +37,13 @@ Deprecation: rails_kindeditor ~> v0.3.0 only support Rails3.1+!(include Rails3.1
 ```
 
 ```ruby
-  2. <%= form_for @article do |f| -%>
+  2. <%= form_for @article do |f| %>
        ...
        <%= f.kindeditor :content %>
        # or <%= f.kindeditor :content, :width => 800, :height => 300 %>
        # or <%= f.kindeditor :content, :allowFileManager => false %>
        ...
-     <% end -%>
+     <% end %>
 ```
 You can use kindeditor's initial parameters as usual, please visit http://www.kindsoft.net/docs/option.html for details.
 
@@ -75,6 +75,21 @@ That's all.
   <%= form.input :content, :as => :kindeditor %>
   # or
   <%= form.input :content, :as => :kindeditor, :input_html => { :height => 300 } %>
+```
+
+## How to get kindeditor's content
+
+```ruby
+  <%= form_for @article do |f| %>
+    <%= f.kindeditor :content, :editor_id => 'my_editor' %>
+  <% end %>
+```
+
+You can get content like this:
+
+```javascript
+  // Javascript code
+  my_editor.html();
 ```
 
 ## Upload options configuration
@@ -201,6 +216,20 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
 ```ruby
   <%= form.input :content, :as => :kindeditor %>
   <%= form.input :content, :as => :kindeditor, :input_html => { :height => 300 } %>
+```
+## 如何获取kindeditor的内容
+
+```ruby
+  <%= form_for @article do |f| %>
+    <%= f.kindeditor :content, :editor_id => 'my_editor' %>
+  <% end %>
+```
+
+可通过下面的Javascript代码获取内容:
+
+```javascript
+  // Javascript code
+  my_editor.html();
 ```
 
 ## 上传图片及文件配置

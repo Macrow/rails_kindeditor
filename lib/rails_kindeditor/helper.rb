@@ -15,20 +15,18 @@ module RailsKindeditor
       instance_tag.send(:add_default_name_and_id, hash)      
       output_buffer = ActiveSupport::SafeBuffer.new
       output_buffer << instance_tag.to_text_area_tag(input_html)
-      js = js_replace(hash['id'], options)
-      output_buffer << javascript_tag(js)
+      output_buffer << javascript_tag(js_replace(hash['id'], options))
     end
     
     private
     def js_replace(dom_id, options = {})
       "KindEditor.ready(function(K){
-      	K.create('##{dom_id}', #{get_options(options).to_json});
+      	#{"#{options[:editor_id]} = " if options[:editor_id]}K.create('##{dom_id}', #{get_options(options).to_json});
       });"
     end
 
     def get_options(options)
-      options.delete(:uploadJson)
-      options.delete(:fileManagerJson)
+      options.delete(:editor_id)
       options.reverse_merge!(:width => '100%')
       options.reverse_merge!(:height => 300)
       options.reverse_merge!(:allowFileManager => true)
