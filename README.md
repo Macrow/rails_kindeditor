@@ -59,6 +59,16 @@ additionally, rails_kindeditor provides one "simple_mode" parameter for render s
 
 That's all.
 
+### Include javascript files at bottom ? Not in the head tag ? How can I load kindeditor correctly ?
+
+For some reasons, you includes javascript files at bottom in your template, rails_kindeditor provides a options for lazyload:
+
+```ruby
+  <%= f.kindeditor :content, :window_onload => true %>
+```
+
+Warning: Kindeditor will load after all the objects loaded.
+
 ## SimpleForm and Formtastic integration
 
 ### simple_form:
@@ -202,6 +212,16 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
 ```
      
 完毕！
+
+### 把javascript放在模板最下方，不放在head里面，如何正确加载kindeditor？
+
+有时候，为了加快页面载入速度，也许你会把javascript引用放在template的底部，rails_kindeditor提供了一个参数可以确保正常加载：
+
+```ruby
+  <%= f.kindeditor :content, :window_onload => true %>
+```
+
+警告：Kindeditor会在页面所有的内容加载完毕后才进行加载，所以需谨慎使用
 
 ## SimpleForm与Formtastic集成：
 

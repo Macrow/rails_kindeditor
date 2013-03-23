@@ -20,13 +20,21 @@ module RailsKindeditor
     
     private
     def js_replace(dom_id, options = {})
-      "KindEditor.ready(function(K){
-      	#{"#{options[:editor_id]} = " if options[:editor_id]}K.create('##{dom_id}', #{get_options(options).to_json});
-      });"
+      editor_id = options[:editor_id].nil? ? '' : "#{options[:editor_id].to_s.downcase} = "
+      if options[:window_onload]
+        "window.onload = function() {
+          #{editor_id}KindEditor.create('##{dom_id}', #{get_options(options).to_json});
+        }"
+      else
+        "KindEditor.ready(function(K){
+        	#{editor_id}K.create('##{dom_id}', #{get_options(options).to_json});
+        });"
+      end
     end
 
     def get_options(options)
       options.delete(:editor_id)
+      options.delete(:window_onload)
       options.reverse_merge!(:width => '100%')
       options.reverse_merge!(:height => 300)
       options.reverse_merge!(:allowFileManager => true)
