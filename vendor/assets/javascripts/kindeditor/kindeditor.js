@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.6 (2013-03-24)
+* @version 4.1.7 (2013-04-21)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.6 (2013-03-24)',
+var _VERSION = '4.1.7 (2013-04-21)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -5016,12 +5016,10 @@ KEditor.prototype = {
 		statusbar.removeClass('statusbar').addClass('ke-statusbar')
 			.append('<span class="ke-inline-block ke-statusbar-center-icon"></span>')
 			.append('<span class="ke-inline-block ke-statusbar-right-icon"></span>');
-		function fullscreenResizeHandler(e) {
-			if (self.isCreated) {
-				self.resize(_docElement().clientWidth, _docElement().clientHeight, false);
-			}
+		if (self._fullscreenResizeHandler) {
+			K(window).unbind('resize', self._fullscreenResizeHandler);
+			self._fullscreenResizeHandler = null;
 		}
-		K(window).unbind('resize', fullscreenResizeHandler);
 		function initResize() {
 			if (statusbar.height() === 0) {
 				setTimeout(initResize, 100);
@@ -5031,7 +5029,12 @@ KEditor.prototype = {
 		}
 		initResize();
 		if (fullscreenMode) {
-			K(window).bind('resize', fullscreenResizeHandler);
+			self._fullscreenResizeHandler = function(e) {
+				if (self.isCreated) {
+					self.resize(_docElement().clientWidth, _docElement().clientHeight, false);
+				}
+			};
+			K(window).bind('resize', self._fullscreenResizeHandler);
 			toolbar.select('fullscreen');
 			statusbar.first().css('visibility', 'hidden');
 			statusbar.last().css('visibility', 'hidden');
@@ -5476,6 +5479,7 @@ _plugin('core', function(K) {
 			self.toolbar.disableAll(false);
 			self.edit.design(true);
 			self.toolbar.unselect('source');
+			self.cmd.selection();
 		}
 		self.designMode = self.edit.designMode;
 	});
@@ -5793,6 +5797,12 @@ _plugin('core', function(K) {
 		if (_IE && _V <= 8) {
 			html = html.replace(/<div\s+[^>]*data-ke-input-tag="([^"]*)"[^>]*>([\s\S]*?)<\/div>/ig, function(full, tag) {
 				return unescape(tag);
+			});
+			html = html.replace(/(<input)((?:\s+[^>]*)?>)/ig, function($0, $1, $2) {
+				if (!/\s+type="[^"]+"/i.test($0)) {
+					return $1 + ' type="text"' + $2;
+				}
+				return $0;
 			});
 		}
 		return html.replace(/(<(?:noscript|noscript\s[^>]*)>)([\s\S]*?)(<\/noscript>)/ig, function($0, $1, $2, $3) {
