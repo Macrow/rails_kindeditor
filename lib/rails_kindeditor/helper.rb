@@ -9,13 +9,11 @@ module RailsKindeditor
     end
     
     def kindeditor(name, method, options = {})
-      input_html = (options.delete(:input_html) || {})
-      hash = input_html.stringify_keys
-      instance_tag = ActionView::Base::InstanceTag.new(name, method, self, options.delete(:object))
-      instance_tag.send(:add_default_name_and_id, hash)      
+      # TODO: Refactory options: 1. kindeditor_option 2. html_option
+      input_html = (options.delete(:input_html) || {}).stringify_keys
       output_buffer = ActiveSupport::SafeBuffer.new
-      output_buffer << instance_tag.to_text_area_tag(input_html)
-      output_buffer << javascript_tag(js_replace(hash['id'], options))
+      output_buffer << build_text_area_tag(name, method, self, options, input_html)
+      output_buffer << javascript_tag(js_replace(input_html['id'], options))
     end
     
     private
@@ -41,11 +39,27 @@ module RailsKindeditor
       options.merge!(:uploadJson => '/kindeditor/upload')
       options.merge!(:fileManagerJson => '/kindeditor/filemanager')
       if options[:simple_mode] == true
-        options.delete(:simple_mode)
         options.merge!(:items => %w{fontname fontsize | forecolor hilitecolor bold italic underline removeformat | justifyleft justifycenter justifyright insertorderedlist insertunorderedlist | emoticons image link})
       end
+      options.delete(:simple_mode)
       options
-    end    
+    end
+    
+    def build_text_area_tag(name, method, template, options, input_html)
+      if Rails.version >= '4.0.0'
+        text_area_tag = ActionView::Helpers::Tags::TextArea.new(name, method, template, options)
+        text_area_tag.send(:add_default_name_and_id, input_html)
+        text_area_tag.render
+      elsif Rails.version >= '3.1.0'
+        text_area_tag = ActionView::Base::InstanceTag.new(name, method, template, options.delete(:object))
+        text_area_tag.send(:add_default_name_and_id, input_html)
+        text_area_tag.to_text_area_tag(input_html)
+      elsif Rails.version >= '3.0.0'
+        raise 'Please use rails_kindeditor v0.2.8 for Rails v3.0.x'
+      else
+        raise 'Please upgrade your Rails !'
+      end
+    end
   end
   
   module Builder

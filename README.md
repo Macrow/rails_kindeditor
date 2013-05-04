@@ -3,9 +3,6 @@
 Kindeditor is a WYSIWYG javascript editor, visit http://www.kindsoft.net for details.
 rails_kindeditor will helps your rails app integrate with kindeditor, includes images and files uploading.
 
-Deprecation: rails_kindeditor ~> v0.3.0 only support Rails3.1+!(include Rails3.1 and Rails3.2)
-             If you're using rails3.0.x, please check rails_kindeditor v0.2.8
-
 <img src="https://github.com/Macrow/rails_kindeditor/raw/master/screenshots/rails_kindeditor.png" alt="rails_indeditor">
 
 ## Installation and usage
@@ -13,7 +10,7 @@ Deprecation: rails_kindeditor ~> v0.3.0 only support Rails3.1+!(include Rails3.1
 ### Add this to your Gemfile
 
 ```ruby
-  gem 'rails_kindeditor', '~> 0.3.15'
+  gem 'rails_kindeditor', '~> 0.3.16'
 ```
 
 ### Run "bundle" command.
@@ -161,15 +158,12 @@ MIT License.
 Kindeditor是国产的所见即所得javascript富文本编辑器, 访问 http://www.kindsoft.net 获取更多信息.
 rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和附件上传功能，文件按照类型、日期进行存储。
 
-注意: rails_kindeditor ~> v0.3.0 仅支持Rails3.1+!当然，包括Rails3.1和Rails3.2.
-    如果你使用rails3.0.x，请使用rails_kindeditor v0.2.8
-
 ## 安装及使用
 
 ### 将下面代码加入Gemfile：
 
 ```ruby
-  gem 'rails_kindeditor', '~> 0.3.15'
+  gem 'rails_kindeditor', '~> 0.3.16'
 ```
 
 ### 运行"bundle"命令：
