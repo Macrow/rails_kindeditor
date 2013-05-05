@@ -11,6 +11,9 @@ module RailsKindeditor
       %w(asset file flash image media).each do |file|
         copy_model(orm, file)
       end
+      if Rails.version < '4.0.0' && Rails.version >= '3.0.0' # insert code for rails3
+        insert_into_file "app/models/kindeditor/asset.rb", "  attr_accessible :asset\n", :after => "before_save :update_asset_attributes\n"
+      end
       if orm == "active_record"
         migration_template "migration/migration.rb", "db/migrate/create_kindeditor_assets.rb"
       end
