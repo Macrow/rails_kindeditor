@@ -4,10 +4,6 @@ class Kindeditor::AssetsController < ApplicationController
   skip_before_filter :verify_authenticity_token
   def create
     @imgFile, @dir = params[:imgFile], params[:dir]
-    if !RailsKindeditor.image_resize_to_limit.nil? && @dir == 'image'
-      Kindeditor::AssetUploader.send(:include, CarrierWave::MiniMagick)
-      Kindeditor::AssetUploader.send(:process, :resize_to_limit => RailsKindeditor.resize_to_limit)
-    end
     unless @imgFile.nil?
       if Kindeditor::AssetUploader.save_upload_info? # save upload info into database
         begin

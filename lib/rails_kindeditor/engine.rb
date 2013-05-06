@@ -21,5 +21,14 @@ module RailsKindeditor
       end
     end
     
+    initializer "rails_kindeditor.image_process" do
+      unless RailsKindeditor.image_resize_to_limit.nil?
+        Kindeditor::ImageUploader.class_eval do
+          include CarrierWave::MiniMagick
+          process :resize_to_limit => RailsKindeditor.resize_to_limit
+        end
+      end
+    end
+    
   end
 end

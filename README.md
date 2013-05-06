@@ -10,7 +10,7 @@ rails_kindeditor will helps your rails app integrate with kindeditor, includes i
 ### Add this to your Gemfile
 
 ```ruby
-  gem 'rails_kindeditor', '~> 0.3.17'
+  gem 'rails_kindeditor', '~> 0.3.18'
 ```
 
 ### Run "bundle" command.
@@ -23,6 +23,15 @@ rails_kindeditor will helps your rails app integrate with kindeditor, includes i
 
 ```bash
   rails generate rails_kindeditor:install
+```
+
+### Rails4 in production mode
+
+In Rails 4.0, precompiling assets no longer automatically copies non-JS/CSS assets from vendor/assets and lib/assets. see https://github.com/rails/rails/pull/7968
+In Rails 4.0's production mode, please run 'rake kindeditor:assets', this method just copy kindeditor into public folder.
+
+```bash
+  rake kindeditor:assets
 ```
 
 ### Usage:
@@ -163,7 +172,7 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
 ### 将下面代码加入Gemfile：
 
 ```ruby
-  gem 'rails_kindeditor', '~> 0.3.17'
+  gem 'rails_kindeditor', '~> 0.3.18'
 ```
 
 ### 运行"bundle"命令：
@@ -176,6 +185,15 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
 
 ```bash
   rails generate rails_kindeditor:install
+```
+
+### Rails4 in production mode
+
+从Rails 4.0开始, precompiling assets不再自动从vendor/assets和lib/assets拷贝非JS/CSS文件. 参见 https://github.com/rails/rails/pull/7968
+如果要使用Rails 4.0的生产模式，请运行'rake kindeditor:assets', 此方法可将kindeditor自动拷贝到你的public/assets目录.
+
+```bash
+  rake kindeditor:assets
 ```
 
 ### 使用方法:
