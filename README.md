@@ -53,6 +53,8 @@ In Rails 4.0's production mode, please run 'rake kindeditor:assets', this method
 ```
 You can use kindeditor's initial parameters as usual, please visit http://www.kindsoft.net/docs/option.html for details.
 
+Sometimes you need to restart your server to make this change apply.
+
 additionally, rails_kindeditor provides one "simple_mode" parameter for render simple mode quickly.
 
 <img src="https://github.com/Macrow/rails_kindeditor/raw/master/screenshots/simple_mode.png" alt="simple mode">
@@ -214,6 +216,8 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
      <% end -%>
 ```
 你可以像往常那样使用kindeditor自身的初始化参数，请访问 http://www.kindsoft.net/docs/option.html 查看更多参数。
+
+有时候你需要重启服务器来更改生效。
 
 另外，rails_kindeditor还额外提供一个"simple_mode"参数，以便快捷使用简单模式的kindeditor。
 
