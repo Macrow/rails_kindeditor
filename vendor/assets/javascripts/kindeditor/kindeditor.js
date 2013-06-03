@@ -212,17 +212,27 @@ var _INLINE_TAG_MAP = _toMap('a,abbr,acronym,b,basefont,bdo,big,br,button,cite,c
 	_AUTOCLOSE_TAG_MAP = _toMap('colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr'),
 	_FILL_ATTR_MAP = _toMap('checked,compact,declare,defer,disabled,ismap,multiple,nohref,noresize,noshade,nowrap,readonly,selected'),
 	_VALUE_TAG_MAP = _toMap('input,button,textarea,select');
+
+// Begining of modification by Macrow
 function _getBasePath() {
 	var els = document.getElementsByTagName('script'), src;
 	for (var i = 0, len = els.length; i < len; i++) {
 		src = els[i].src || '';
-		if (/kindeditor[\w\-\.]*\.js/.test(src)) {
+		if (/kindeditor[\w\-\.]*\.js/.test(src)) { // in development mode
 			return src.substring(0, src.lastIndexOf('/') + 1);
 		}
+		if (/application[\w\-\.]*\.js/.test(src)) { // in production mode, we need application.js.
+			return src.substring(0, src.lastIndexOf('/') + 1) + 'kindeditor/';
+		}
+		if (/[\w\-\.]*\.js/.test(src)) { // if no application.js found, we just use the first js file path.
+			return src.substring(0, src.lastIndexOf('/') + 1) + 'kindeditor/';
+		}
 	}
-	return '';
+	return '/assets/kindeditor/';
 }
-K.basePath = '/assets/kindeditor/'; //_getBasePath(); ##### Modified by Macrow #####
+// End of modification by Macrow
+
+K.basePath = _getBasePath();
 K.options = {
 	designMode : true,
 	fullscreenMode : false,
