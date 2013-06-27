@@ -224,9 +224,6 @@ function _getBasePath() {
 		if (/application[\w\-\.]*\.js/.test(src)) { // in production mode, we need application.js.
 			return src.substring(0, src.lastIndexOf('/') + 1) + 'kindeditor/';
 		}
-		if (/[\w\-\.]*\.js/.test(src)) { // if no application.js found, we just use the first js file path.
-			return src.substring(0, src.lastIndexOf('/') + 1) + 'kindeditor/';
-		}
 	}
 	return '/assets/kindeditor/';
 }
