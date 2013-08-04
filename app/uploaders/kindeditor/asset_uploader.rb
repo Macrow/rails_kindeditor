@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'carrierwave/processing/mime_types'
+
 class Kindeditor::AssetUploader < CarrierWave::Uploader::Base
   
   EXT_NAMES = {:image => RailsKindeditor.upload_image_ext,
@@ -20,7 +22,7 @@ class Kindeditor::AssetUploader < CarrierWave::Uploader::Base
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
     if Kindeditor::AssetUploader.save_upload_info?
-      "#{RailsKindeditor.upload_store_dir}/#{model.class.to_s.underscore.gsub(/(kindeditor\/)|(_uploader)/, '')}/#{model.created_at.strftime("%Y%m")}"
+      "#{RailsKindeditor.upload_store_dir}/#{model.asset_type.to_s.underscore.gsub(/(kindeditor\/)|(_uploader)/, '')}/#{model.created_at.strftime("%Y%m")}"
     else
       "#{RailsKindeditor.upload_store_dir}/#{self.class.to_s.underscore.gsub(/(kindeditor\/)|(_uploader)/, '')}/#{Time.now.strftime("%Y%m")}"
     end

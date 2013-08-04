@@ -16,7 +16,22 @@ module RailsKindeditor
       output_buffer << javascript_tag(js_replace(input_html['id'], options))
     end
     
+    def kindeditor_upload_json_path(*args)
+      options = args.extract_options!
+      owner_id_query_string = options[:owner_id] ? "?owner_id=#{options[:owner_id]}" : ''
+      "#{root_url}kindeditor/upload#{owner_id_query_string}"
+    end
+    
+    def kindeditor_file_manager_json_path
+      "#{root_url}kindeditor/filemanager"
+    end
+    
     private
+    
+    def root_url
+      main_app.respond_to?(:root_url) ? main_app.root_url : '/'
+    end
+    
     def js_replace(dom_id, options = {})
       editor_id = options[:editor_id].nil? ? '' : "#{options[:editor_id].to_s.downcase} = "
       if options[:window_onload]
@@ -36,8 +51,8 @@ module RailsKindeditor
       options.reverse_merge!(:width => '100%')
       options.reverse_merge!(:height => 300)
       options.reverse_merge!(:allowFileManager => true)
-      options.merge!(:uploadJson => "#{main_app.root_url}kindeditor/upload")
-      options.merge!(:fileManagerJson => "#{main_app.root_url}kindeditor/filemanager")
+      options.merge!(:uploadJson => kindeditor_upload_json_path(:owner_id => options.delete(:owner_id)))
+      options.merge!(:fileManagerJson => kindeditor_file_manager_json_path)
       if options[:simple_mode] == true
         options.merge!(:items => %w{fontname fontsize | forecolor hilitecolor bold italic underline removeformat | justifyleft justifycenter justifyright insertorderedlist insertunorderedlist | emoticons image link})
       end

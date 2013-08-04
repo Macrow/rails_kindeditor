@@ -6,7 +6,9 @@ class Kindeditor::Asset < ActiveRecord::Base
   
   private
   def update_asset_attributes
-    self.file_size = asset.file.size
-    self.file_type = asset.file.content_type
+    if asset.present? && asset_changed?
+      self.file_size = asset.file.size
+      self.file_type = asset.file.content_type
+    end
   end
 end

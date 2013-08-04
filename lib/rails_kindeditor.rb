@@ -1,5 +1,6 @@
 require 'rails_kindeditor/engine'
 require 'rails_kindeditor/helper'
+require 'rails_kindeditor/active_record'
 require 'carrierwave'
 require 'mini_magick'
 

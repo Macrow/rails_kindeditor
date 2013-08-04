@@ -8,6 +8,8 @@ class Kindeditor::AssetsController < ApplicationController
       if Kindeditor::AssetUploader.save_upload_info? # save upload info into database
         begin
           @asset = "Kindeditor::#{@dir.camelize}".constantize.new(:asset => @imgFile)
+          @asset.owner_id = params[:owner_id] ? params[:owner_id] : 0
+          @asset.asset_type = @dir
           if @asset.save
             render :text => ({:error => 0, :url => @asset.asset.url}.to_json)
           else

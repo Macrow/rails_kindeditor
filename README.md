@@ -10,7 +10,7 @@ rails_kindeditor will helps your rails app integrate with kindeditor, includes i
 ### Add this to your Gemfile
 
 ```ruby
-  gem 'rails_kindeditor', '~> 0.3.20'
+  gem 'rails_kindeditor', '~> 0.4.0'
 ```
 
 ### Run "bundle" command.
@@ -64,6 +64,57 @@ additionally, rails_kindeditor provides one "simple_mode" parameter for render s
 ```
 
 That's all.
+
+### Work with turbolinks
+
+rails_kindeditor will not load the scripts under the turbolinks, there's two way to solve this problem:
+
+1.use "'data-no-turbolink' => true" when we need to load kindeditor，this will shut down the turbolinks in this page
+
+```ruby
+  <%= link_to 'Edit', edit_article_path(article), 'data-no-turbolink' => true %>
+```
+
+2.load kindeditor manually, but you should specify the parameters again, include the textarea's id.
+
+```coffeescript
+  # coffeescript code
+  $(document).on 'page:load', ->
+    if $('#article_content').length > 0
+      KindEditor.create '#article_content', "width":"100%", "height":300, "allowFileManager":true, "uploadJson":"/kindeditor/upload", "fileManagerJson":"/kindeditor/filemanager"
+```
+
+simple mode
+```coffeescript
+  # coffeescript code
+  $(document).on 'page:load', ->
+    if $('#article_content').length > 0
+      KindEditor.create '#article_content',
+                      "width":"100%",
+                      "height":300,
+                      "allowFileManager":true,
+                      "uploadJson":"/kindeditor/upload",
+                      "fileManagerJson":"/kindeditor/filemanager",
+                      "items":["fontname","fontsize","|","forecolor","hilitecolor","bold","italic","underline","removeformat","|","justifyleft","justifycenter","justifyright","insertorderedlist","insertunorderedlist","|","emoticons","image","link"]
+```
+
+When you need to specify the owner_id：
+
+```ruby
+f.kindeditor :content, owner_id: @article.id, data: {upload: kindeditor_upload_json_path(owner_id: @article.id), filemanager: kindeditor_file_manager_json_path}
+```
+
+```coffeescript
+  # coffeescript code
+  $(document).on 'page:load', ->
+    if $('#article_content').length > 0
+      KindEditor.create '#article_content',
+                        "width" : "100%",
+                        "height" : 300,
+                        "allowFileManager" : true,
+                        "uploadJson" : $('#article_content').data('upload'),
+                        "fileManagerJson" : $('#article_content').data('filemanager')
+```
 
 ### Include javascript files at bottom ? Not in the head tag ? How can I load kindeditor correctly ?
 
@@ -150,6 +201,40 @@ rails_kindeditor can save upload file information into database.
   rake db:migrate
 ```
 
+### Delete uploaded files automatically (only for active_record)
+
+You can specify the owner for uploaded files, when the owner was destroying, all the uploaded files(belongs to the owner) will be destroyed automatically.
+
+1. specify the owner_id for kindeditor
+
+```ruby
+   <%= form_for @article do |f| %>
+     ...
+     <%= f.kindeditor :content, :owner_id => @article.id  %>
+     ...
+   <% end %>
+```
+Warnning: the @article must be created before this scene, the @article.id should not be empty.
+
+2. add has_many_kindeditor_assets in your own model
+
+```ruby
+  class Article < ActiveRecord::Base
+    has_many_kindeditor_assets :attachments, :dependent => :destroy
+    # has_many_kindeditor_assets :attachments, :dependent => :nullify
+    # has_many_kindeditor_assets :your_name, :dependent => :destroy
+  end
+```
+
+3. relationship
+
+```ruby
+  article = Article.first
+  article.attachments # => the article's assets uploaded by kindeditor
+  asset = article.attachments.first
+  asset.owner # => aritcle
+```
+
 ### If you're using mongoid, please add 'gem "carrierwave-mongoid"' in your Gemfile
 
 ```ruby
@@ -172,7 +257,7 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
 ### 将下面代码加入Gemfile：
 
 ```ruby
-  gem 'rails_kindeditor', '~> 0.3.20'
+  gem 'rails_kindeditor', '~> 0.4.0'
 ```
 
 ### 运行"bundle"命令：
@@ -224,6 +309,59 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
 ```
      
 完毕！
+
+### 如何在turbolinks下使用
+
+rails_kindeditor在turbolinks下不会正常加载，只有当页面刷新时才正常。turbolinks的机制就是这样的，页面根本没刷新，这和pjax是一样的，所以kindeditor没加载很正常。
+
+有两个办法可以解决：
+
+1.在需要加载kindeditor的链接加入 'data-no-turbolink' => true ，此时相当在这个页面于关闭turbolinks。
+
+```ruby
+  <%= link_to 'Edit', edit_article_path(article), 'data-no-turbolink' => true %>
+```
+
+2.在turbolinks载入完毕后手动加载kindeditor，不过所有参数都要设置，而且需要知道并设定textarea的id。
+
+```coffeescript
+  # coffeescript code
+  $(document).on 'page:load', ->
+    if $('#article_content').length > 0
+      KindEditor.create '#article_content', "width":"100%", "height":300, "allowFileManager":true, "uploadJson":"/kindeditor/upload", "fileManagerJson":"/kindeditor/filemanager"
+```
+
+simple模式也需要手动设定
+```coffeescript
+  # coffeescript code
+  $(document).on 'page:load', ->
+    if $('#article_content').length > 0
+      KindEditor.create '#article_content',
+                      "width":"100%",
+                      "height":300,
+                      "allowFileManager":true,
+                      "uploadJson":"/kindeditor/upload",
+                      "fileManagerJson":"/kindeditor/filemanager",
+                      "items":["fontname","fontsize","|","forecolor","hilitecolor","bold","italic","underline","removeformat","|","justifyleft","justifycenter","justifyright","insertorderedlist","insertunorderedlist","|","emoticons","image","link"]
+```
+
+需要指定owner_id的方法：
+
+```ruby
+f.kindeditor :content, owner_id: @article.id, data: {upload: kindeditor_upload_json_path(owner_id: @article.id), filemanager: kindeditor_file_manager_json_path}
+```
+
+```coffeescript
+  # coffeescript code
+  $(document).on 'page:load', ->
+    if $('#article_content').length > 0
+      KindEditor.create '#article_content',
+                        "width" : "100%",
+                        "height" : 300,
+                        "allowFileManager" : true,
+                        "uploadJson" : $('#article_content').data('upload'),
+                        "fileManagerJson" : $('#article_content').data('filemanager')
+```
 
 ### 把javascript放在模板最下方，不放在head里面，如何正确加载kindeditor？
 
@@ -304,6 +442,40 @@ rails_kindeditor 可以将上传文件信息记录入数据库，以便扩展应
 
 ```bash
   rake db:migrate
+```
+
+### 自动删除上传的文件(仅在active_record下工作)
+
+你可以为上传的文件指定归属，比如一名用户，或者一篇文章，当用户或者文章被删除时，所有属于该用户或者该文章的上传文件将会被自动删除。
+
+1. 为kindeditor指定owner_id
+
+```ruby
+   <%= form_for @article do |f| %>
+     ...
+     <%= f.kindeditor :content, :owner_id => @article.id  %>
+     ...
+   <% end %>
+```
+警告: @article应该事先被创建，@article.id不应该是空的。
+
+2. 在你自己的模型里加入has_many_kindeditor_assets
+
+```ruby
+  class Article < ActiveRecord::Base
+    has_many_kindeditor_assets :attachments, :dependent => :destroy
+    # has_many_kindeditor_assets :attachments, :dependent => :nullify
+    # has_many_kindeditor_assets :your_name, :dependent => :destroy
+  end
+```
+
+3. 相互关系
+
+```ruby
+  article = Article.first
+  article.attachments # => the article's assets uploaded by kindeditor
+  asset = article.attachments.first
+  asset.owner # => aritcle
 ```
 
 ### 如果你使用的是mongoid, 请在你的Gemfile里加入'gem "carrierwave-mongoid"'
