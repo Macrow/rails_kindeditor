@@ -205,7 +205,7 @@ rails_kindeditor can save upload file information into database.
 
 You can specify the owner for uploaded files, when the owner was destroying, all the uploaded files(belongs to the owner) will be destroyed automatically.
 
-1. specify the owner_id for kindeditor
+####1. specify the owner_id for kindeditor
 
 ```ruby
    <%= form_for @article do |f| %>
@@ -214,9 +214,12 @@ You can specify the owner for uploaded files, when the owner was destroying, all
      ...
    <% end %>
 ```
-Warnning: the @article must be created before this scene, the @article.id should not be empty.
 
-2. add has_many_kindeditor_assets in your own model
+```ruby
+Warnning: the @article must be created before this scene, the @article.id should not be empty.
+```
+
+####2. add has_many_kindeditor_assets in your own model
 
 ```ruby
   class Article < ActiveRecord::Base
@@ -226,7 +229,7 @@ Warnning: the @article must be created before this scene, the @article.id should
   end
 ```
 
-3. relationship
+####3. relationship
 
 ```ruby
   article = Article.first
@@ -448,7 +451,7 @@ rails_kindeditor 可以将上传文件信息记录入数据库，以便扩展应
 
 你可以为上传的文件指定归属，比如一名用户，或者一篇文章，当用户或者文章被删除时，所有属于该用户或者该文章的上传文件将会被自动删除。
 
-1. 为kindeditor指定owner_id
+####1. 为kindeditor指定owner_id
 
 ```ruby
    <%= form_for @article do |f| %>
@@ -457,9 +460,12 @@ rails_kindeditor 可以将上传文件信息记录入数据库，以便扩展应
      ...
    <% end %>
 ```
-警告: @article应该事先被创建，@article.id不应该是空的。
 
-2. 在你自己的模型里加入has_many_kindeditor_assets
+```ruby
+警告: @article应该事先被创建，@article.id不应该是空的。
+```
+
+####2. 在你自己的模型里加入has_many_kindeditor_assets
 
 ```ruby
   class Article < ActiveRecord::Base
@@ -469,7 +475,7 @@ rails_kindeditor 可以将上传文件信息记录入数据库，以便扩展应
   end
 ```
 
-3. 相互关系
+####3. 相互关系
 
 ```ruby
   article = Article.first

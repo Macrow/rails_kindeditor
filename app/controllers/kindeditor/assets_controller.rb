@@ -9,6 +9,7 @@ class Kindeditor::AssetsController < ApplicationController
         begin
           @asset = "Kindeditor::#{@dir.camelize}".constantize.new(:asset => @imgFile)
           @asset.owner_id = params[:owner_id] ? params[:owner_id] : 0
+          logger.warn '========= Warning: the owner_id is 0, "delete uploaded files automatically" will not work. =========' if defined?(logger) && @asset.owner_id == 0
           @asset.asset_type = @dir
           if @asset.save
             render :text => ({:error => 0, :url => @asset.asset.url}.to_json)
