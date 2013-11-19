@@ -24,6 +24,7 @@ rails_kindeditor will helps your rails app integrate with kindeditor, includes i
 ```bash
   rails generate rails_kindeditor:install
 ```
+notice: rails_kindeditor needs applications.js in your project.
 
 ### Rails4 in production mode
 
@@ -274,6 +275,7 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
 ```bash
   rails generate rails_kindeditor:install
 ```
+注意： 在你的工程中需要有application.js文件。
 
 ### Rails4 in production mode
 
