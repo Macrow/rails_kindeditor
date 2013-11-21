@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/Macrow"
   s.summary     = "Kindeditor for Ruby on Rails"
   s.description = "rails_kindeditor will helps your rails app integrate with kindeditor, including images and files uploading."
+  s.license = 'MIT'
 
   s.rubyforge_project = "rails_kindeditor"
 
