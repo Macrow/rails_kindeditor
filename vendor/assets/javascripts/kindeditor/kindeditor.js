@@ -216,17 +216,15 @@ var _INLINE_TAG_MAP = _toMap('a,abbr,acronym,b,basefont,bdo,big,br,button,cite,c
 
 // Begining of modification by Macrow
 function _getBasePath() {
+	var refPath = '/assets/kindeditor/';
 	var els = document.getElementsByTagName('script'), src;
 	for (var i = 0, len = els.length; i < len; i++) {
 		src = els[i].src || '';
-		if (/kindeditor[\w\-\.]*\.js/.test(src)) { // in development mode
-			return src.substring(0, src.lastIndexOf('/') + 1);
-		}
-		if (/application[\w\-\.]*\.js/.test(src)) { // in production mode, we need application.js.
-			return src.substring(0, src.lastIndexOf('/') + 1) + 'kindeditor/';
+		if (/(kindeditor|application)[\w\-\.]*\.js/.test(src)) {
+			return src.substring(0, src.IndexOf('assets')) + refPath;
 		}
 	}
-	return '/assets/kindeditor/';
+	return refPath;
 }
 // End of modification by Macrow
 
