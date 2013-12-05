@@ -1,5 +1,4 @@
-# Kindeditor for Ruby on Rails
-[![Gem Version](https://badge.fury.io/rb/rails_kindeditor.png)](http://badge.fury.io/rb/rails_kindeditor)
+# Kindeditor for Ruby on Rails[![Gem Version](https://badge.fury.io/rb/rails_kindeditor.png)](http://badge.fury.io/rb/rails_kindeditor)
 
 Kindeditor is a WYSIWYG javascript editor, visit http://www.kindsoft.net for details.
 rails_kindeditor will helps your rails app integrate with kindeditor, includes images and files uploading.
@@ -11,7 +10,7 @@ rails_kindeditor will helps your rails app integrate with kindeditor, includes i
 ### Add this to your Gemfile
 
 ```ruby
-  gem 'rails_kindeditor', '~> 0.4.2'
+  gem 'rails_kindeditor'
 ```
 
 ### Run "bundle" command.
@@ -262,7 +261,7 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
 ### 将下面代码加入Gemfile：
 
 ```ruby
-  gem 'rails_kindeditor', '~> 0.4.2'
+  gem 'rails_kindeditor'
 ```
 
 ### 运行"bundle"命令：
