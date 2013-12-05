@@ -1,4 +1,4 @@
-# Kindeditor for Ruby on Rails[![Gem Version](https://badge.fury.io/rb/rails_kindeditor.png)](http://badge.fury.io/rb/rails_kindeditor)
+# Kindeditor for Ruby on Rails  [![Gem Version](https://badge.fury.io/rb/rails_kindeditor.png)](http://badge.fury.io/rb/rails_kindeditor)
 
 Kindeditor is a WYSIWYG javascript editor, visit http://www.kindsoft.net for details.
 rails_kindeditor will helps your rails app integrate with kindeditor, includes images and files uploading.
