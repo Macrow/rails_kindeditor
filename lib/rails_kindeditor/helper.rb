@@ -35,7 +35,7 @@ module RailsKindeditor
     def js_replace(dom_id, options = {})
       editor_id = options[:editor_id].nil? ? '' : "#{options[:editor_id].to_s.downcase} = "
       if options[:window_onload]
-        require 'SecureRandom'
+        require 'securerandom'
         random_name = SecureRandom.hex;
         "var old_onload_#{random_name};
         if(typeof window.onload == 'function') old_onload_#{random_name} = window.onload;

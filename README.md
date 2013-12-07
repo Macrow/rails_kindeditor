@@ -60,7 +60,7 @@ additionally, rails_kindeditor provides one "simple_mode" parameter for render s
 
 ```ruby
   kindeditor_tag :content, 'default content value', :simple_mode => true
-  f.kindeditor_tag :content, :simple_mode => true
+  f.kindeditor :content, :simple_mode => true
   f.input :content, :as => :kindeditor, :input_html => { :simple_mode => true } # simple_form & formtastic
 ```
 
@@ -309,7 +309,7 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
 
 ```ruby
   kindeditor_tag :content, 'default content value', :simple_mode => true
-  f.kindeditor_tag :content, :simple_mode => true
+  f.kindeditor :content, :simple_mode => true
   f.input :content, :as => :kindeditor, :input_html => { :simple_mode => true } # simple_form & formtastic  
 ```
      
