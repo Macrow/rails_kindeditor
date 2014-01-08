@@ -19,17 +19,21 @@ module RailsKindeditor
     def kindeditor_upload_json_path(*args)
       options = args.extract_options!
       owner_id_query_string = options[:owner_id] ? "?owner_id=#{options[:owner_id]}" : ''
-      "#{root_url}kindeditor/upload#{owner_id_query_string}"
+      "#{main_app_root_url}kindeditor/upload#{owner_id_query_string}"
     end
     
     def kindeditor_file_manager_json_path
-      "#{root_url}kindeditor/filemanager"
+      "#{main_app_root_url}kindeditor/filemanager"
     end
     
     private
     
-    def root_url
-      main_app.respond_to?(:root_url) ? main_app.root_url : '/'
+    def main_app_root_url
+      begin
+        main_app.root_url.slice(0, main_app.root_url.rindex(main_app.root_path)) + '/'
+      rescue
+        '/'
+      end
     end
     
     def js_replace(dom_id, options = {})
