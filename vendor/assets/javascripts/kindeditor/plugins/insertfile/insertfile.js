@@ -131,6 +131,12 @@ KindEditor.plugin('insertfile', function(K) {
 		self.plugin.fileDialog({
 			clickFn : function(url, title) {
 				var html = '<a class="ke-insertfile" href="' + url + '" data-ke-src="' + url + '" target="_blank">' + title + '</a>';
+				$("#att").show();				
+				var extStart=url.lastIndexOf(".")+1; 
+				var ext=url.substring(extStart,url.length).toUpperCase(); 
+				var typeInput = '<input id="fileUrl" name="article[fileUrl]" type="hidden" value="'+url+'" />';
+				var urlInput = '<input id="fileType" name="article[fileType]" type="hidden" value="'+ext+'" />';
+				$(".att").html(typeInput+urlInput+html);
 				self.insertHtml(html).hideDialog().focus();
 			}
 		});
