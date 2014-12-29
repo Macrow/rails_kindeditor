@@ -55,7 +55,7 @@ KindEditor.plugin('insertfile', function(K) {
 						return;
 					}
 					if (K.trim(title) === '') {
-						title = url;
+						title = lang.link;//默认显示固定文本而非文件名称，以格式化显示
 					}
 					clickFn.call(self, url, title);
 				}
