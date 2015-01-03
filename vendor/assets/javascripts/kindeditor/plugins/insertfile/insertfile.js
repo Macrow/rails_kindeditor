@@ -55,7 +55,7 @@ KindEditor.plugin('insertfile', function(K) {
 						return;
 					}
 					if (K.trim(title) === '') {
-						title = url;
+						title = lang.link;//默认显示固定文本而非文件名称，以格式化显示
 					}
 					clickFn.call(self, url, title);
 				}
@@ -131,6 +131,12 @@ KindEditor.plugin('insertfile', function(K) {
 		self.plugin.fileDialog({
 			clickFn : function(url, title) {
 				var html = '<a class="ke-insertfile" href="' + url + '" data-ke-src="' + url + '" target="_blank">' + title + '</a>';
+				$("#att").show();				
+				var extStart=url.lastIndexOf(".")+1; 
+				var ext=url.substring(extStart,url.length).toUpperCase(); 
+				var typeInput = '<input id="fileUrl" name="article[fileUrl]" type="hidden" value="'+url+'" />';
+				var urlInput = '<input id="fileType" name="article[fileType]" type="hidden" value="'+ext+'" />';
+				$(".att").html(typeInput+urlInput+html);
 				self.insertHtml(html).hideDialog().focus();
 			}
 		});

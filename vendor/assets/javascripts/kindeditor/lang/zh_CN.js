@@ -164,6 +164,7 @@ KindEditor.lang({
 	'filemanager.fileType' : '类型',
 	'insertfile.url' : 'URL',
 	'insertfile.title' : '文件说明',
+	'insertfile.link' : '链接',
 	'insertfile.upload' : '上传',
 	'insertfile.viewServer' : '文件空间',
 	'table.cells' : '单元格数',
