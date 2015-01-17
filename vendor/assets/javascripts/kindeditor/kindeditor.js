@@ -224,6 +224,7 @@ function _getBasePath() {
 			return src.substring(0, src.indexOf('assets')) + refPath;
 		}
 	}
+	refPath = 'http://asset1.wityun.com/damitech/'
 	return refPath;
 }
 // End of modification by Macrow
