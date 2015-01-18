@@ -184,6 +184,19 @@ You can customize some option for uploading.
   # config.image_resize_to_limit = [800, 800]
 ```
 
+## Asset host options configuration
+
+```ruby
+  # if you have config in your rails application like this:
+  # /config/enviroments/production.rb
+  #   # config.action_controller.asset_host = "http://asset.example.com"
+  #   # config.assets.prefix = "assets_prefx"
+  # then you should:
+  #
+  config.asset_url_prefix = "http://asset.example.com/assets_prefx/" if Rails.env.production?
+```
+
+
 ## Save upload file information into database(optional)
 
 rails_kindeditor can save upload file information into database.
@@ -430,6 +443,19 @@ f.kindeditor :content, owner_id: @article.id, data: {upload: kindeditor_upload_j
   #     400x400   => 400x400 # 图片小于该限制尺寸则不作处理
   # config.image_resize_to_limit = [800, 800]
 ```
+
+## 静态资源地址配置
+
+```ruby
+  # if you have config in your rails application like this:
+  # /config/enviroments/production.rb
+  #   # config.action_controller.asset_host = "http://asset.example.com"
+  #   # config.assets.prefix = "assets_prefx"
+  # then you should:
+  #
+  config.asset_url_prefix = "http://asset.example.com/assets_prefx/" if Rails.env.production?
+```
+
 
 ## 将上传文件信息记录入数据库（可选）
 
