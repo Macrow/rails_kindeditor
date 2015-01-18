@@ -44,11 +44,13 @@ module RailsKindeditor
         "var old_onload_#{random_name};
         if(typeof window.onload == 'function') old_onload_#{random_name} = window.onload;
         window.onload = function() {
+          KindEditor.basePath='#{RailsKindeditor.base_path}';
           #{editor_id}KindEditor.create('##{dom_id}', #{get_options(options).to_json});
           if(old_onload_#{random_name}) old_onload_#{random_name}();
         }"
       else
-        "KindEditor.ready(function(K){
+        "KindEditor.basePath='#{RailsKindeditor.base_path}';
+        KindEditor.ready(function(K){
         	#{editor_id}K.create('##{dom_id}', #{get_options(options).to_json});
         });"
       end
