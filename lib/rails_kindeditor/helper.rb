@@ -12,14 +12,33 @@ module RailsKindeditor
       # TODO: Refactory options: 1. kindeditor_option 2. html_option
       input_html = (options.delete(:input_html) || {}).stringify_keys
       output_buffer = ActiveSupport::SafeBuffer.new
-      output_buffer << build_text_area_tag(name, method, self, options, input_html)
+      output_buffer << build_text_area_tag(name, method, self, merge_assets_info(options), input_html)
       output_buffer << javascript_tag(js_replace(input_html['id'], options))
+    end
+    
+    def merge_assets_info(options)
+      owner = options.delete(:owner)
+      if Kindeditor::AssetUploader.save_upload_info? && (!owner.nil?) && (!owner.id.nil?)
+        begin
+          owner_id = owner.id
+          owner_type = owner.class.name
+          options.reverse_merge!(owner_id: owner_id, owner_type: owner_type, data: {upload: kindeditor_upload_json_path(owner_id: owner_id, owner_type: owner_type), filemanager: kindeditor_file_manager_json_path})
+          return options
+        end
+      else
+        options.reverse_merge!(data: {upload: kindeditor_upload_json_path, filemanager: kindeditor_file_manager_json_path})
+      end
     end
     
     def kindeditor_upload_json_path(*args)
       options = args.extract_options!
       owner_id_query_string = options[:owner_id] ? "?owner_id=#{options[:owner_id]}" : ''
-      "#{main_app_root_url}kindeditor/upload#{owner_id_query_string}"
+      owner_type_query_string = options[:owner_type] ? "&owner_type=#{options[:owner_type]}" : ''
+      if owner_id_query_string == '' && owner_type_query_string == ''
+        "#{main_app_root_url}kindeditor/upload"
+      else
+        "#{main_app_root_url}kindeditor/upload#{owner_id_query_string}#{owner_type_query_string}"
+      end
     end
     
     def kindeditor_file_manager_json_path
@@ -62,8 +81,8 @@ module RailsKindeditor
       options.reverse_merge!(:width => '100%')
       options.reverse_merge!(:height => 300)
       options.reverse_merge!(:allowFileManager => true)
-      options.merge!(:uploadJson => kindeditor_upload_json_path(:owner_id => options.delete(:owner_id)))
-      options.merge!(:fileManagerJson => kindeditor_file_manager_json_path)
+      options.reverse_merge!(:uploadJson => kindeditor_upload_json_path(:owner_id => options.delete(:owner_id), :owner_type => options.delete(:owner_type)))
+      options.reverse_merge!(:fileManagerJson => kindeditor_file_manager_json_path)
       if options[:simple_mode] == true
         options.merge!(:items => %w{fontname fontsize | forecolor hilitecolor bold italic underline removeformat | justifyleft justifycenter justifyright insertorderedlist insertunorderedlist | emoticons image link})
       end

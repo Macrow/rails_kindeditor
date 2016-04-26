@@ -5,6 +5,7 @@ class CreateKindeditorAssets < ActiveRecord::Migration
       t.integer :file_size
       t.string :file_type
       t.integer :owner_id
+      t.string :owner_type
       t.string :asset_type # list by kindeditor: image, file, media, flash
       t.timestamps
     end

@@ -102,7 +102,7 @@ simple mode
 When you need to specify the owner_id：
 
 ```ruby
-f.kindeditor :content, owner_id: @article.id, data: {upload: kindeditor_upload_json_path(owner_id: @article.id), filemanager: kindeditor_file_manager_json_path}
+f.kindeditor :content, owner: @article
 ```
 
 ```coffeescript
@@ -224,7 +224,7 @@ You can specify the owner for uploaded files, when the owner was destroying, all
 ```ruby
    <%= form_for @article do |f| %>
      ...
-     <%= f.kindeditor :content, :owner_id => @article.id  %>
+     <%= f.kindeditor :content, :owner => @article  %>
      ...
    <% end %>
 ```
@@ -366,7 +366,7 @@ simple模式也需要手动设定
 需要指定owner_id的方法：
 
 ```ruby
-f.kindeditor :content, owner_id: @article.id, data: {upload: kindeditor_upload_json_path(owner_id: @article.id), filemanager: kindeditor_file_manager_json_path}
+f.kindeditor :content, owner: @article
 ```
 
 ```coffeescript
@@ -484,7 +484,7 @@ rails_kindeditor 可以将上传文件信息记录入数据库，以便扩展应
 ```ruby
    <%= form_for @article do |f| %>
      ...
-     <%= f.kindeditor :content, :owner_id => @article.id  %>
+     <%= f.kindeditor :content, :owner => @article  %>
      ...
    <% end %>
 ```
