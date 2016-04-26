@@ -73,6 +73,8 @@ KindEditor.lang({
 	deleteMedia : '미디어 삭제',
 	editLink : '링크 속성',
 	deleteLink : '링크 삭제',
+	editAnchor : 'Anchor properties',
+	deleteAnchor : 'Delete Anchor',
 	tableprop : '표 속성',
 	tablecellprop : '열 속성',
 	tableinsert : '표 추가',
@@ -235,3 +237,10 @@ KindEditor.lang({
 		'3.html' : '목록'
 	}
 }, 'ko');
+
+KindEditor.each(KindEditor.options.items, function(i, name) {
+	if (name == 'baidumap') {
+		KindEditor.options.items[i] = 'map';
+	}
+});
+KindEditor.options.langType = 'ko';
