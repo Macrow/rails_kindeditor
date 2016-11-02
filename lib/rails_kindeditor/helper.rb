@@ -3,6 +3,7 @@ module RailsKindeditor
     def kindeditor_tag(name, content = nil, options = {})
       id = sanitize_to_id(name)
       input_html = { :id => id }.merge(options.delete(:input_html) || {})
+      input_html[:class] = "#{input_html[:class]} rails_kindeditor"
       output = ActiveSupport::SafeBuffer.new
       output << text_area_tag(name, content, input_html)
       output << javascript_tag(js_replace(id, options))
@@ -18,6 +19,7 @@ module RailsKindeditor
     
     def merge_assets_info(options)
       owner = options.delete(:owner)
+      options[:class] = "#{options[:class]} rails_kindeditor"
       if Kindeditor::AssetUploader.save_upload_info? && (!owner.nil?) && (!owner.id.nil?)
         begin
           owner_id = owner.id

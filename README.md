@@ -22,17 +22,17 @@ rails_kindeditor will helps your rails app integrate with kindeditor, includes i
 ### Run install generator:
 
 ```bash
-  rails generate rails_kindeditor:install
+  rails g rails_kindeditor:install
 ```
 notice: rails_kindeditor needs applications.js in your project.
 
-### Rails4 in production mode
+### Production mode
 
-In Rails 4.0, precompiling assets no longer automatically copies non-JS/CSS assets from vendor/assets and lib/assets. see https://github.com/rails/rails/pull/7968
-In Rails 4.0's production mode, please run 'rake kindeditor:assets', this method just copy kindeditor into public folder.
+Precompiling assets no longer automatically copies non-JS/CSS assets from vendor/assets and lib/assets. see https://github.com/rails/rails/pull/7968
+please run 'rails kindeditor:assets', this method just copy kindeditor into public folder.
 
 ```bash
-  rake kindeditor:assets
+  rails kindeditor:assets
 ```
 
 ### Usage:
@@ -66,56 +66,32 @@ additionally, rails_kindeditor provides one "simple_mode" parameter for render s
 
 That's all.
 
-### Work with turbolinks
+### Work with Turbolinks5
 
-rails_kindeditor will not load the scripts under the turbolinks, there's two way to solve this problem:
-
-1.use "'data-no-turbolink' => true" when we need to load kindeditor，this will shut down the turbolinks in this page
-
-```ruby
-  <%= link_to 'Edit', edit_article_path(article), 'data-no-turbolink' => true %>
-```
-
-2.load kindeditor manually, but you should specify the parameters again, include the textarea's id.
+Create a file app/assets/javascripts/load_kindeditor.coffee
 
 ```coffeescript
   # coffeescript code
-  $(document).on 'page:load', ->
-    if $('#article_content').length > 0
-      KindEditor.create '#article_content', "width":"100%", "height":300, "allowFileManager":true, "uploadJson":"/kindeditor/upload", "fileManagerJson":"/kindeditor/filemanager"
+  $(document).on 'turbolinks:before-cache', ->
+    KindEditor.remove('.rails_kindeditor')
+
+  $(document).on 'turbolinks:load', ->
+    $('.rails_kindeditor').each ->
+      KindEditor.create "##{$(this).attr('id')}", "allowFileManager": true, "uploadJson": $(this).data('upload'), "fileManagerJson": $(this).data('filemanager'), "width": '100%', "height": '300'
 ```
 
 simple mode
 ```coffeescript
   # coffeescript code
-  $(document).on 'page:load', ->
-    if $('#article_content').length > 0
-      KindEditor.create '#article_content',
-                      "width":"100%",
-                      "height":300,
-                      "allowFileManager":true,
-                      "uploadJson":"/kindeditor/upload",
-                      "fileManagerJson":"/kindeditor/filemanager",
-                      "items":["fontname","fontsize","|","forecolor","hilitecolor","bold","italic","underline","removeformat","|","justifyleft","justifycenter","justifyright","insertorderedlist","insertunorderedlist","|","emoticons","image","link"]
+  $(document).on 'turbolinks:before-cache', ->
+    KindEditor.remove('.rails_kindeditor')
+
+  $(document).on 'turbolinks:load', ->
+    $('.rails_kindeditor').each ->
+      KindEditor.create "##{$(this).attr('id')}", "allowFileManager": true, "uploadJson": $(this).data('upload'), "fileManagerJson": $(this).data('filemanager'), "width": '100%', "height": '300', "items":["fontname","fontsize","|","forecolor","hilitecolor","bold","italic","underline","removeformat","|","justifyleft","justifycenter","justifyright","insertorderedlist","insertunorderedlist","|","emoticons","image","link"]
 ```
 
-When you need to specify the owner_id：
-
-```ruby
-f.kindeditor :content, owner: @article
-```
-
-```coffeescript
-  # coffeescript code
-  $(document).on 'page:load', ->
-    if $('#article_content').length > 0
-      KindEditor.create '#article_content',
-                        "width" : "100%",
-                        "height" : 300,
-                        "allowFileManager" : true,
-                        "uploadJson" : $('#article_content').data('upload'),
-                        "fileManagerJson" : $('#article_content').data('filemanager')
-```
+Make sure the file is loaded from your app/assets/javascripts/application.js
 
 ### Include javascript files at bottom ? Not in the head tag ? How can I load kindeditor correctly ?
 
@@ -125,7 +101,7 @@ For some reasons, you includes javascript files at bottom in your template, rail
   <%= f.kindeditor :content, :window_onload => true %>
 ```
 
-Warning: Kindeditor will load after all the objects loaded.
+Warning: Kindeditor will be load when the others have been loaded.
 
 ## SimpleForm and Formtastic integration
 
@@ -286,17 +262,17 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
 ### 安装Kindeditor，运行下面的代码：
 
 ```bash
-  rails generate rails_kindeditor:install
+  rails g rails_kindeditor:install
 ```
 注意： 在你的工程中需要有application.js文件。
 
-### Rails4 in production mode
+### Production mode
 
-从Rails 4.0开始, precompiling assets不再自动从vendor/assets和lib/assets拷贝非JS/CSS文件. 参见 https://github.com/rails/rails/pull/7968
-如果要使用Rails 4.0的生产模式，请运行'rake kindeditor:assets', 此方法可将kindeditor自动拷贝到你的public/assets目录.
+Precompiling assets不再自动从vendor/assets和lib/assets拷贝非JS/CSS文件. 参见 https://github.com/rails/rails/pull/7968
+如果要使用生产模式，请运行'rails kindeditor:assets', 此方法可将kindeditor自动拷贝到你的public/assets目录.
 
 ```bash
-  rake kindeditor:assets
+  rails kindeditor:assets
 ```
 
 ### 使用方法:
@@ -328,58 +304,32 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
      
 完毕！
 
-### 如何在turbolinks下使用
+### 如何在Turbolinks5下使用
 
-rails_kindeditor在turbolinks下不会正常加载，只有当页面刷新时才正常。turbolinks的机制就是这样的，页面根本没刷新，这和pjax是一样的，所以kindeditor没加载很正常。
-
-有两个办法可以解决：
-
-1.在需要加载kindeditor的链接加入 'data-no-turbolink' => true ，此时相当在这个页面于关闭turbolinks。
-
-```ruby
-  <%= link_to 'Edit', edit_article_path(article), 'data-no-turbolink' => true %>
-```
-
-2.在turbolinks载入完毕后手动加载kindeditor，不过所有参数都要设置，而且需要知道并设定textarea的id。
+创建如下文件 app/assets/javascripts/load_kindeditor.coffee
 
 ```coffeescript
   # coffeescript code
-  $(document).on 'page:load', ->
-    if $('#article_content').length > 0
-      KindEditor.create '#article_content', "width":"100%", "height":300, "allowFileManager":true, "uploadJson":"/kindeditor/upload", "fileManagerJson":"/kindeditor/filemanager"
+  $(document).on 'turbolinks:before-cache', ->
+    KindEditor.remove('.rails_kindeditor')
+
+  $(document).on 'turbolinks:load', ->
+    $('.rails_kindeditor').each ->
+      KindEditor.create "##{$(this).attr('id')}", "allowFileManager": true, "uploadJson": $(this).data('upload'), "fileManagerJson": $(this).data('filemanager'), "width": '100%', "height": '300'
 ```
 
-simple模式也需要手动设定
+简单编辑模式
 ```coffeescript
   # coffeescript code
-  $(document).on 'page:load', ->
-    if $('#article_content').length > 0
-      KindEditor.create '#article_content',
-                      "width":"100%",
-                      "height":300,
-                      "allowFileManager":true,
-                      "uploadJson":"/kindeditor/upload",
-                      "fileManagerJson":"/kindeditor/filemanager",
-                      "items":["fontname","fontsize","|","forecolor","hilitecolor","bold","italic","underline","removeformat","|","justifyleft","justifycenter","justifyright","insertorderedlist","insertunorderedlist","|","emoticons","image","link"]
+  $(document).on 'turbolinks:before-cache', ->
+    KindEditor.remove('.rails_kindeditor')
+
+  $(document).on 'turbolinks:load', ->
+    $('.rails_kindeditor').each ->
+      KindEditor.create "##{$(this).attr('id')}", "allowFileManager": true, "uploadJson": $(this).data('upload'), "fileManagerJson": $(this).data('filemanager'), "width": '100%', "height": '300', "items":["fontname","fontsize","|","forecolor","hilitecolor","bold","italic","underline","removeformat","|","justifyleft","justifycenter","justifyright","insertorderedlist","insertunorderedlist","|","emoticons","image","link"]
 ```
 
-需要指定owner_id的方法：
-
-```ruby
-f.kindeditor :content, owner: @article
-```
-
-```coffeescript
-  # coffeescript code
-  $(document).on 'page:load', ->
-    if $('#article_content').length > 0
-      KindEditor.create '#article_content',
-                        "width" : "100%",
-                        "height" : 300,
-                        "allowFileManager" : true,
-                        "uploadJson" : $('#article_content').data('upload'),
-                        "fileManagerJson" : $('#article_content').data('filemanager')
-```
+请确保以上文件被app/assets/javascripts/application.js正确加载
 
 ### 把javascript放在模板最下方，不放在head里面，如何正确加载kindeditor？
 
