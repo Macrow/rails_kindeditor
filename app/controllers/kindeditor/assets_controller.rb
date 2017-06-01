@@ -46,16 +46,16 @@ class Kindeditor::AssetsController < ApplicationController
       return
     end
     
-    Dir.chdir(Rails.public_path)
+    upload_path = Rails.public_path
     RailsKindeditor.upload_store_dir.split('/').each do |dir|
-      Dir.mkdir(dir) unless Dir.exist?(dir)
-      Dir.chdir(dir)
-    end
-    
-    Dir.mkdir(@dir) unless Dir.exist?(@dir)
-    
+      upload_path += dir
+      Dir.mkdir(upload_path) unless Dir.exist?(upload_path)      
+    end    
+       
     @root_path += @dir + "/"
     @root_url += @dir + "/"
+    
+    Dir.mkdir(@root_path) unless Dir.exist?(@root_path)
     
     @path = params[:path].strip || ""
     if @path.empty?
