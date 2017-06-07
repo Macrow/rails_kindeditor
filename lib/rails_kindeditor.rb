@@ -16,7 +16,7 @@ module RailsKindeditor
   @@upload_flash_ext = %w[swf flv]
 
   mattr_accessor :upload_media_ext
-  @@upload_media_ext = %w[swf flv mp3 wav wma wmv mid avi mpg asf rm rmvb]
+  @@upload_media_ext = %w[f4v flv mp3 mp4 ogg webm]
   
   mattr_accessor :upload_file_ext
   @@upload_file_ext = %w[doc docx xls xlsx ppt htm html txt zip rar gz bz2]

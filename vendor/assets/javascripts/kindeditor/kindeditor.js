@@ -930,7 +930,7 @@ function _mediaType(src) {
 	if (/\.(rm|rmvb)(\?|$)/i.test(src)) {
 		return 'audio/x-pn-realaudio-plugin';
 	}
-	if (/\.(swf|flv)(\?|$)/i.test(src)) {
+	if (/\.(swf|flv|mp4|ogg|mp3|webm|f4v)(\?|$)/i.test(src)) {
 		return 'application/x-shockwave-flash';
 	}
 	return 'video/x-ms-asf-plugin';
@@ -949,7 +949,7 @@ function _mediaAttrs(srcTag) {
 	return _getAttrList(unescape(srcTag));
 }
 function _mediaEmbed(attrs) {
-	var html = '<embed ';
+    var html = '<embed name="player" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
 	_each(attrs, function(key, val) {
 		html += key + '="' + val + '" ';
 	});
@@ -7100,7 +7100,8 @@ KindEditor.plugin('flash', function(K) {
 							return;
 						}
 						var html = K.mediaImg(self.themesPath + 'common/blank.gif', {
-								src : url,
+                            flashvars : 'file=' + url,
+                            src : '/jwplayer/player.swf',
 								type : K.mediaType('.swf'),
 								width : width,
 								height : height,
@@ -7174,8 +7175,8 @@ KindEditor.plugin('flash', function(K) {
 			var img = self.plugin.getSelectedFlash();
 			if (img) {
 				var attrs = K.mediaAttrs(img.attr('data-ke-tag'));
-				urlBox.val(attrs.src);
-				widthBox.val(K.removeUnit(img.css('width')) || attrs.width || 0);
+                urlBox.val(attrs.flashvars);
+                widthBox.val(K.removeUnit(img.css('width')) || attrs.width || 0);
 				heightBox.val(K.removeUnit(img.css('height')) || attrs.height || 0);
 			}
 			urlBox[0].focus();
@@ -7804,8 +7805,9 @@ KindEditor.plugin('media', function(K) {
 							return;
 						}
 						var html = K.mediaImg(self.themesPath + 'common/blank.gif', {
-								src : url,
-								type : K.mediaType(url),
+                            flashvars : 'file=' + url,
+                            src : '/jwplayer/player.swf',
+							type : K.mediaType(url),
 								width : width,
 								height : height,
 								autostart : autostartBox[0].checked ? 'true' : 'false',
