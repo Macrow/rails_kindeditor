@@ -949,19 +949,21 @@ function _mediaAttrs(srcTag) {
 	return _getAttrList(unescape(srcTag));
 }
 function _mediaEmbed(attrs) {
-	var html = '';
     if (/\.(mp4|ogg|mp3|webm|f4v)(\?|$)/i.test(attrs.flashvars)) {
-        html += "<video src='"+ attrs.flashvars.substr(5,attrs.flashvars.length) +"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls'>";
+        var html = "<video src='"+ attrs.flashvars.substr(5,attrs.flashvars.length) +"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls'>";
+        html += '<embed name="player" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
+        _each(attrs, function(key, val) {
+            html += key + '="' + val + '" ';
+        });
+        html += '/></video>';
+    }else{
+        var html = '<embed name="player" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
+        _each(attrs, function(key, val) {
+            html += key + '="' + val + '" ';
+        });
+        html += '/>';
     }
-    html += '<embed name="player" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
-	_each(attrs, function(key, val) {
-		html += key + '="' + val + '" ';
-	});
-	html += '/>';
-    if (/\.(mp4|ogg|mp3|webm|f4v)(\?|$)/i.test(attrs.flashvars)) {
-        html += '</video>';
-    }
-	return html;
+    return html;
 }
 function _mediaImg(blankPath, attrs) {
 	var width = attrs.width,
