@@ -956,7 +956,7 @@ function _mediaEmbed(attrs) {
     });
     html += '/>';
     if (/\.(mp4|ogg|mp3|webm|f4v)(\?|$)/i.test(attrs.flashvars)) {
-        html = "<video src='"+ attrs.flashvars.substr(5,attrs.flashvars.length) +"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls'>" + html + "</video>"
+        html += "<video src='"+ attrs.flashvars.substr(5,attrs.flashvars.length) +"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls'>" + html + "</video>"
     }
 	return html;
 }
