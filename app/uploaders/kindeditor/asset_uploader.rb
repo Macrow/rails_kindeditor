@@ -84,6 +84,14 @@ class Kindeditor::AssetUploader < CarrierWave::Uploader::Base
       return false
     end
   end
+  
+  def move_to_cache
+    false
+  end
+
+  def move_to_store
+    true
+  end
 
 end
 
