@@ -10,8 +10,10 @@ rails_kindeditor will helps your rails app integrate with kindeditor, includes i
 ### Add this to your Gemfile
 
 ```ruby
+  gem 'jquery-rails'
   gem 'rails_kindeditor'
 ```
+notice: Rails 5.1 has dropped dependency on jQuery from the default,but rails_kindeditor need 'jquery-rails'.
 
 ### Run "bundle" command.
 
@@ -112,7 +114,7 @@ Warning: Kindeditor will be load when the others have been loaded.
   # or
   <%= form.input :content, :as => :kindeditor, :label => false, :input_html => { :width => 800, :height => 300 } %>
 ```
-  
+
 ### formtastic:
 
 ```ruby
@@ -139,7 +141,7 @@ You can get content like this:
 ## Upload options configuration
 
 When you run "rails generate rails_kindeditor:install", installer will copy configuration files in config/initializers folder.
-You can customize some option for uploading. 
+You can customize some option for uploading.
 
 ```ruby
   # Specify the subfolders in public directory.
@@ -195,7 +197,7 @@ rails_kindeditor can save upload file information into database.
 
 You can specify the owner for uploaded files, when the owner was destroying, all the uploaded files(belongs to the owner) will be destroyed automatically.
 
-####1. specify the owner_id for kindeditor
+###1. specify the owner_id for kindeditor
 
 ```ruby
    <%= form_for @article do |f| %>
@@ -209,7 +211,7 @@ You can specify the owner for uploaded files, when the owner was destroying, all
 Warnning: the @article must be created before this scene, the @article.id should not be empty.
 ```
 
-####2. add has_many_kindeditor_assets in your own model
+###2. add has_many_kindeditor_assets in your own model
 
 ```ruby
   class Article < ActiveRecord::Base
@@ -219,7 +221,7 @@ Warnning: the @article must be created before this scene, the @article.id should
   end
 ```
 
-####3. relationship
+###3. relationship
 
 ```ruby
   article = Article.first
@@ -250,8 +252,10 @@ rails_kindeditor可以帮助你的rails程序集成kindeditor,包括了图片和
 ### 将下面代码加入Gemfile：
 
 ```ruby
+  gem 'jquery-rails'
   gem 'rails_kindeditor'
 ```
+注意：Rails 5.1 已没有将jQuery作为默认设置,但rails_kindeditor需要'jquery-rails'.
 
 ### 运行"bundle"命令：
 
@@ -301,7 +305,7 @@ Precompiling assets不再自动从vendor/assets和lib/assets拷贝非JS/CSS文�
   f.kindeditor :content, :simple_mode => true
   f.input :content, :as => :kindeditor, :input_html => { :simple_mode => true } # simple_form & formtastic  
 ```
-     
+
 完毕！
 
 ### 如何在Turbolinks5下使用
@@ -429,7 +433,7 @@ rails_kindeditor 可以将上传文件信息记录入数据库，以便扩展应
 
 你可以为上传的文件指定归属，比如一名用户，或者一篇文章，当用户或者文章被删除时，所有属于该用户或者该文章的上传文件将会被自动删除。
 
-####1. 为kindeditor指定owner_id
+###1. 为kindeditor指定owner_id
 
 ```ruby
    <%= form_for @article do |f| %>
@@ -443,7 +447,7 @@ rails_kindeditor 可以将上传文件信息记录入数据库，以便扩展应
 警告: @article应该事先被创建，@article.id不应该是空的。
 ```
 
-####2. 在你自己的模型里加入has_many_kindeditor_assets
+###2. 在你自己的模型里加入has_many_kindeditor_assets
 
 ```ruby
   class Article < ActiveRecord::Base
@@ -453,7 +457,7 @@ rails_kindeditor 可以将上传文件信息记录入数据库，以便扩展应
   end
 ```
 
-####3. 相互关系
+###3. 相互关系
 
 ```ruby
   article = Article.first
