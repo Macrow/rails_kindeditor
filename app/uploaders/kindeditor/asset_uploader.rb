@@ -69,7 +69,7 @@ class Kindeditor::AssetUploader < CarrierWave::Uploader::Base
 
   def filename
     if original_filename 
-      @name ||= Digest::MD5.hexdigest(File.dirname(current_path)).slice(0, 12)
+      @name ||= Digest::MD5.hexdigest(current_path)
       "#{@name}.#{file.extension}"
     end
   end
