@@ -31,19 +31,15 @@ class Kindeditor::AssetsController < ApplicationController
 
   def list
     root_url = File.join('/', RailsKindeditor.upload_store_dir)
-    unless params[:dir].blank?
-      root_url = File.join(root_url, params[:dir])
-    end
+    root_url = File.join(root_url, params[:dir]) unless params[:dir].blank?
     root_url.split('/').each do |dir|
       path ||= Rails.public_path
       path = File.join(path, dir)
       Dir.mkdir(path) unless Dir.exist?(path)
     end
-    unless params[:path].blank?
-      root_url = File.join(root_url, params[:path])
-    end
-    root_path = File.join( Rails.public_path, root_url)
+    root_url = File.join(root_url, params[:path]) unless params[:path].blank?
 
+    root_path = File.join( Rails.public_path, root_url)
     file_list = []
     Dir.foreach(root_path) do |entry|
       next if (entry == '..' || entry == '.')
