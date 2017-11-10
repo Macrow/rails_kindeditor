@@ -44,6 +44,7 @@ class Kindeditor::AssetsController < ApplicationController
     Dir.foreach(root_path) do |entry|
       next if (entry == '..' || entry == '.')
       full_path = File.join(root_path, entry)
+      file_ext = File.extname(full_path).gsub(/\./,"")
       info = {
           filename: entry,
           datetime: File.mtime(full_path).to_s(:db)
@@ -58,8 +59,7 @@ class Kindeditor::AssetsController < ApplicationController
         info[:is_dir] = false
         info[:has_file] = false
         info[:filesize] = File.size(full_path)
-        info[:dir_path] = ""
-        file_ext = File.extname(full_path).gsub(/\./,"")
+        info[:dir_path] = ""        
         info[:is_photo] =  Kindeditor::AssetUploader.is_image?(file_ext)
         info[:filetype] = file_ext
       end
