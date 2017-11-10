@@ -19,7 +19,7 @@ class Kindeditor::AssetUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    if Kindeditor::AssetUploader.save_upload_info?
+    if model
       "#{RailsKindeditor.upload_store_dir}/#{model.asset_type.to_s.underscore.gsub(/(kindeditor\/)|(_uploader)/, '')}/#{model.created_at.strftime("%Y%m")}"
     else
       "#{RailsKindeditor.upload_store_dir}/#{self.class.to_s.underscore.gsub(/(kindeditor\/)|(_uploader)/, '')}/#{Time.now.strftime("%Y%m")}"
@@ -74,23 +74,35 @@ class Kindeditor::AssetUploader < CarrierWave::Uploader::Base
     end
   end
   
-  def self.save_upload_info?
-    begin
-      %w(asset file flash image media).each do |s|
-        "Kindeditor::#{s.camelize}".constantize
-      end
-      return true
-    rescue
-      return false
-    end
-  end
-  
   def move_to_cache
     false
   end
 
   def move_to_store
     true
+  end
+
+  def self.has_asset?(name)
+    EXT_NAMES.keys.include?(name.to_sym)
+  end
+
+  def self.is_image?(extname)
+    EXT_NAMES[:image].include?(extname)
+  end
+
+
+  def self.create_asset_model(name)
+    return nil unless %w(asset file flash image media).include?(name.to_s)
+    class_name = "Kindeditor::#{name.camelize}"
+    return Object.const_get(class_name) if Object.const_defined?(class_name)
+    nil
+  end
+
+  def self.create_uploader(name)
+    return nil unless %w(asset file flash image media).include?(name.to_s)
+    class_name = "Kindeditor::#{name.camelize}Uploader"
+    return Object.const_get(class_name) if Object.const_defined?(class_name)
+    nil
   end
 
 end

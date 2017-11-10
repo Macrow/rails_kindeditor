@@ -3,7 +3,7 @@
 class Kindeditor::AssetsController < ApplicationController
   skip_before_action :verify_authenticity_token
   def create
-    cls = create_asset_model(params[:dir])
+    cls =  Kindeditor::AssetUploader.create_asset_model(params[:dir])
     if cls
       options = {
           asset: params[:imgFile],
@@ -18,7 +18,7 @@ class Kindeditor::AssetsController < ApplicationController
         render json: {error: 1, message: asset.errors.full_messages}
       end
     else
-      cls = create_uploader(params[:dir])
+      cls =  Kindeditor::AssetUploader.create_uploader(params[:dir])
       if cls
         uploader = cls.new()
         uploader.store!(params[:imgFile])
@@ -44,7 +44,6 @@ class Kindeditor::AssetsController < ApplicationController
     end
     root_path = File.join( Rails.public_path, root_url)
 
-    img_ext = Kindeditor::AssetUploader::EXT_NAMES[:image]
     file_list = []
     Dir.foreach(root_path) do |entry|
       next if (entry == '..' || entry == '.')
@@ -65,7 +64,7 @@ class Kindeditor::AssetsController < ApplicationController
         info[:filesize] = File.size(full_path)
         info[:dir_path] = ""
         file_ext = File.extname(full_path).gsub(/\./,"")
-        info[:is_photo] = img_ext.include?(file_ext)
+        info[:is_photo] =  Kindeditor::AssetUploader.is_image?(file_ext)
         info[:filetype] = file_ext
       end
       file_list << info
@@ -83,21 +82,6 @@ class Kindeditor::AssetsController < ApplicationController
         file_list: file_list
     }
     render json: result
-  end
-
-  private
-  def create_asset_model(name)
-    return nil unless %w(asset file flash image media).include?(name.to_s)
-    class_name = "Kindeditor::#{name.camelize}"
-    return Object.const_get(class_name) if Object.const_defined?(class_name)
-    nil
-  end
-
-  def create_uploader(name)
-    return nil unless %w(asset file flash image media).include?(name.to_s)
-    class_name = "Kindeditor::#{name.camelize}Uploader"
-    return Object.const_get(class_name) if Object.const_defined?(class_name)
-    nil
   end
 
 end
