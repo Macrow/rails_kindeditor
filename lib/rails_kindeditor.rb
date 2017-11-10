@@ -57,5 +57,7 @@ module RailsKindeditor
   def self.setup
     yield self
   end
+
+
   
 end
