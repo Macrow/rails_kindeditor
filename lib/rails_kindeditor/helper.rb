@@ -20,7 +20,7 @@ module RailsKindeditor
     def merge_assets_info(options)
       owner = options.delete(:owner)
       options[:class] = "#{options[:class]} rails_kindeditor"
-      if Kindeditor::AssetUploader.save_upload_info? && (!owner.nil?) && (!owner.id.nil?)
+      if Kindeditor::AssetUploader.model && (!owner.nil?) && (!owner.id.nil?)
         begin
           owner_id = owner.id
           owner_type = owner.class.name
