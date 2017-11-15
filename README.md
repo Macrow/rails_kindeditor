@@ -1,4 +1,5 @@
 # Kindeditor for Ruby on Rails  [![Gem Version](https://badge.fury.io/rb/rails_kindeditor.png)](http://badge.fury.io/rb/rails_kindeditor)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMacrow%2Frails_kindeditor.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FMacrow%2Frails_kindeditor?ref=badge_shield)
 
 Kindeditor is a WYSIWYG javascript editor, visit http://www.kindsoft.net for details.
 rails_kindeditor will helps your rails app integrate with kindeditor, includes images and files uploading.
@@ -241,6 +242,9 @@ Warnning: the @article must be created before this scene, the @article.id should
 MIT License.
 
 
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMacrow%2Frails_kindeditor.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FMacrow%2Frails_kindeditor?ref=badge_large)
 
 # Kindeditor for Ruby on Rails 中文文档
 
