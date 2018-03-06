@@ -7109,7 +7109,7 @@ KindEditor.plugin('flash', function(K) {
 							return;
 						}
 						var html = K.mediaImg(self.themesPath + 'common/blank.gif', {                            
-                                                                src : url,
+                                src : url,
 								type : K.mediaType('.swf'),
 								width : width,
 								height : height,
