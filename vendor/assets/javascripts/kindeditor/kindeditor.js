@@ -7108,9 +7108,8 @@ KindEditor.plugin('flash', function(K) {
 							heightBox[0].focus();
 							return;
 						}
-						var html = K.mediaImg(self.themesPath + 'common/blank.gif', {
-                            flashvars : 'file=' + url,
-                            src : '/jwplayer/player.swf',
+						var html = K.mediaImg(self.themesPath + 'common/blank.gif', {                            
+                                                                src : url,
 								type : K.mediaType('.swf'),
 								width : width,
 								height : height,
