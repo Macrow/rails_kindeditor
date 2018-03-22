@@ -51,7 +51,7 @@ class Kindeditor::AssetsController < ApplicationController
       }
       if File.directory?(full_path)
         info[:is_dir] = true
-        info[:has_file] = Dir.entries(full_path) > 0
+        info[:has_file] = Dir.entries(full_path).size > 0
         info[:filesize] = 0
         info[:is_photo] = false
         info[:filetype] = ""
