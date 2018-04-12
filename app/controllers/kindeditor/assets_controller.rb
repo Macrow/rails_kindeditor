@@ -65,11 +65,17 @@ class Kindeditor::AssetsController < ApplicationController
       end
       file_list << info
     end
-    order = "name"
+    order = "filename"
     unless params[:order].blank?
-      order = params[:order].downcase if %w(name size type).include?(params[:order].downcase)
+      order = params[:order].downcase if %w(filename filesize filetype datetime).include?(params[:order].downcase)
     end
-    file_list.sort! {|a, b| a["file#{order}".to_sym] <=> b["file#{order}".to_sym]}
+
+    if order=='datetime'
+      file_list.sort! {|a, b| b["#{order}".to_sym] <=> a["#{order}".to_sym]}
+    else
+      file_list.sort! {|a, b| a["#{order}".to_sym] <=> b["#{order}".to_sym]}
+    end
+
     result = {
         moveup_dir_path: params[:path].gsub(/(.*?)[^\/]+\/$/, ""),
         current_dir_path: params[:path],
