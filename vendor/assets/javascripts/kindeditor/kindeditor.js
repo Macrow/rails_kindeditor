@@ -950,9 +950,8 @@ function _mediaAttrs(srcTag) {
 	return _getAttrList(unescape(srcTag));
 }
 function _mediaEmbed(attrs) {
-    alert(JSON.stringify(attrs));
-    if (/\.(mp4|ogg|mp3|webm|f4v)(\?|$)/i.test(attrs.flashvars)) {
-        var html = "<video src='"+ attrs.flashvars.substr(5,attrs.flashvars.length) +"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls'>";
+    if (/\.(mp4|ogg|mp3|webm|f4v)(\?|$)/i.test(attrs.src)) {
+        var html = "<video src='"+ attrs.src+"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls'>";
         html += '<embed name="player" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
         _each(attrs, function(key, val) {
             html += key + '="' + val + '" ';
