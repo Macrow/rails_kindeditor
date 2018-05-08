@@ -303,8 +303,8 @@ K.options = {
 			'.font-style', '.text-decoration', '.vertical-align', '.background', '.border'
 		],
 		a : ['id', 'class', 'href', 'target', 'name'],
-		embed : ['id', 'class', 'src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess', 'wmode' ,"class"],
-        video : ['src', 'width', 'height','controls',"class"],
+		embed : ['id', 'class', 'src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess', 'wmode'],
+        video : ['src', 'width', 'height','controls'],
 		img : ['id', 'class', 'src', 'width', 'height', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
 		'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
 			'id', 'class', 'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
@@ -950,16 +950,15 @@ function _mediaAttrs(srcTag) {
 	return _getAttrList(unescape(srcTag));
 }
 function _mediaEmbed(attrs) {
-
     if (/\.(mp4|ogg|mp3|webm|f4v)(\?|$)/i.test(attrs.src)) {
-        var html = "<video src='"+ attrs.src +"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls' class='video-width-s'>";
+        var html = "<video src='"+ attrs.src+"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls'>";
         html += '<embed name="player" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
         _each(attrs, function(key, val) {
             html += key + '="' + val + '" ';
         });
         html += '/></video>';
     }else{
-        var html = '<embed name="player" allowscriptaccess="always" allowfullscreen="true"  class="video-width-s" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
+        var html = '<embed name="player" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
         _each(attrs, function(key, val) {
             html += key + '="' + val + '" ';
         });
@@ -6664,8 +6663,8 @@ KindEditor.plugin('clearhtml', function(K) {
 		html = html.replace(/(<style[^>]*>)([\s\S]*?)(<\/style>)/ig, '');
 		html = K.formatHtml(html, {
 			a : ['href', 'target'],
-			embed : ['src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess','class'],
-            video : ['src', 'width', 'height', 'controls','class'],
+			embed : ['src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
+            video : ['src', 'width', 'height', 'controls'],
 			img : ['src', 'width', 'height', 'border', 'alt', 'title', '.width', '.height'],
 			table : ['border'],
 			'td,th' : ['rowspan', 'colspan'],
@@ -6910,9 +6909,10 @@ KindEditor.plugin('filemanager', function(K) {
 			'<option value="LIST">' + lang.listImage + '</option>',
 			'</select> ',
 			lang.orderType + ' <select class="ke-inline-block" name="orderType">',
-			'<option value="NAME">' + lang.fileName + '</option>',
-			'<option value="SIZE">' + lang.fileSize + '</option>',
-			'<option value="TYPE">' + lang.fileType + '</option>',
+            '<option value="fileName">' + lang.fileName + '</option>',
+            '<option value="fileSize">' + lang.fileSize + '</option>',
+            '<option value="fileType">' + lang.fileType + '</option>',
+            '<option value="DateTime">' + lang.fileDate + '</option>',
 			'</select>',
 			'</div>',
 			'<div class="ke-clearfix"></div>',
@@ -7189,7 +7189,13 @@ KindEditor.plugin('flash', function(K) {
 			var img = self.plugin.getSelectedFlash();
 			if (img) {
 				var attrs = K.mediaAttrs(img.attr('data-ke-tag'));
-                urlBox.val(attrs.flashvars);
+				if(attrs.flashvars){
+                    urlBox.val(attrs.flashvars);
+				}else{
+                    urlBox.val(attrs.src);
+				}
+
+
                 widthBox.val(K.removeUnit(img.css('width')) || attrs.width || 0);
 				heightBox.val(K.removeUnit(img.css('height')) || attrs.height || 0);
 			}
@@ -7819,7 +7825,7 @@ KindEditor.plugin('media', function(K) {
 							return;
 						}
 						var html = K.mediaImg(self.themesPath + 'common/blank.gif', {
-                            flashvars : url,
+                            flashvars :  url,
                             src : '/jwplayer/player.swf',
 							type : K.mediaType(url),
 								width : width,
@@ -7894,8 +7900,10 @@ KindEditor.plugin('media', function(K) {
 				viewServerBtn.hide();
 			}
 			var img = self.plugin.getSelectedMedia();
+
 			if (img) {
 				var attrs = K.mediaAttrs(img.attr('data-ke-tag'));
+
 				urlBox.val(attrs.src);
 				widthBox.val(K.removeUnit(img.css('width')) || attrs.width || 0);
 				heightBox.val(K.removeUnit(img.css('height')) || attrs.height || 0);
