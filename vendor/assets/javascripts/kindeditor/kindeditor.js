@@ -304,7 +304,7 @@ K.options = {
 		],
 		a : ['id', 'class', 'href', 'target', 'name'],
 		embed : ['id', 'class', 'src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess', 'wmode'],
-        video : ['src', 'width', 'height','controls'],
+        video : ['src', 'width', 'height','controls','class'],
 		img : ['id', 'class', 'src', 'width', 'height', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
 		'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
 			'id', 'class', 'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
@@ -950,15 +950,23 @@ function _mediaAttrs(srcTag) {
 	return _getAttrList(unescape(srcTag));
 }
 function _mediaEmbed(attrs) {
-    if (/\.(mp4|ogg|mp3|webm|f4v)(\?|$)/i.test(attrs.src)) {
-        var html = "<video src='"+ attrs.src+"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls'>";
-        html += '<embed name="player" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
+    if (/\.(mp4|ogg|mp3|webm|f4v)(\?|$)/i.test(attrs.flashvars)) {
+        var html = "<video src='"+attrs.flashvars+"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls' class='video-width-s'>";
+        html += '<embed class="video-width-son" name="player" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
         _each(attrs, function(key, val) {
             html += key + '="' + val + '" ';
         });
         html += '/></video>';
-    }else{
-        var html = '<embed name="player" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
+    }else if(/\.(mp4|ogg|mp3|webm|f4v)(\?|$)/i.test(attrs.src)) {
+        var html = "<video src='"+ attrs.src+"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls' class='video-width-s'>";
+        html += '<embed class="video-width-son" name="player" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
+        _each(attrs, function(key, val) {
+            html += key + '="' + val + '" ';
+        });
+        html += '/></video>';
+
+	}else{
+        var html = '<embed name="player" class="video-width-s" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
         _each(attrs, function(key, val) {
             html += key + '="' + val + '" ';
         });
