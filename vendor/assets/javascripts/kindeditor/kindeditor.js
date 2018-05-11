@@ -954,27 +954,23 @@ function _mediaEmbed(attrs) {
     if (attrs.autostart){
         autostart = 'autoplay="autoplay"';
     }
+    var video_html = '<embed class="video-width-son" name="player" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
+     _each(attrs, function(key, val) {
+        video_html += key + '="' + val + '" ';
+     });
+	video_html += '/>';
+    var html = "";
     if (/\.(mp4|ogg|mp3|webm|f4v)(\?|$)/i.test(attrs.flashvars)) {
-        var html = "<video src='"+attrs.flashvars+"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls' class='video-width-s' "+autostart+">";
-        html += '<embed class="video-width-son" name="player" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
-        _each(attrs, function(key, val) {
-            html += key + '="' + val + '" ';
-        });
-        html += '/></video>';
+		html = "<video src='"+attrs.flashvars+"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls' class='video-width-s' "+autostart+">";
+        html +=video_html;
+        html += '</video>';
     }else if(/\.(mp4|ogg|mp3|webm|f4v)(\?|$)/i.test(attrs.src)) {
-        var html = "<video src='"+ attrs.src+"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls' class='video-width-s' "+autostart+">";
-        html += '<embed class="video-width-son" name="player" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
-        _each(attrs, function(key, val) {
-            html += key + '="' + val + '" ';
-        });
-        html += '/></video>';
+        html = "<video src='"+ attrs.src+"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls' class='video-width-s' "+autostart+">";
+        html +=video_html;
+        html += '</video>';
 
 	}else{
-        var html = '<embed name="player" class="video-width-s" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
-        _each(attrs, function(key, val) {
-            html += key + '="' + val + '" ';
-        });
-        html += '/>';
+        html =  video_html;
     }
     return html;
 }
@@ -7098,7 +7094,11 @@ KindEditor.plugin('flash', function(K) {
 				'<label for="keHeight" style="width:60px;">' + lang.height + '</label>',
 				'<input type="text" id="keHeight" class="ke-input-text ke-input-number" name="height" value="400" maxlength="4" /> ',
 				'</div>',
-				'</div>'
+                '<div class="ke-dialog-row">',
+                '<label for="keAutostart">自动播放</label>',
+                '<input type="checkbox" id="keAutostart"  checked name="autostart" value="" /> ',
+                '</div>',
+                '</div>'
 			].join('');
 			var dialog = self.createDialog({
 				name : name,
@@ -7127,10 +7127,11 @@ KindEditor.plugin('flash', function(K) {
 							return;
 						}
 						var html = K.mediaImg(self.themesPath + 'common/blank.gif', {                            
-                                                                src : url,
+                                src : url,
 								type : K.mediaType('.swf'),
 								width : width,
 								height : height,
+                                autostart : true,
 								quality : 'high'
 							});
 						self.insertHtml(html).hideDialog().focus();
