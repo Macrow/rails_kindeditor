@@ -304,7 +304,7 @@ K.options = {
 		],
 		a : ['id', 'class', 'href', 'target', 'name'],
 		embed : ['id', 'class', 'src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess', 'wmode'],
-        video : ['src', 'width', 'height','controls','class'],
+        video : ['src', 'width', 'height','controls','class','autoplay'],
 		img : ['id', 'class', 'src', 'width', 'height', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
 		'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
 			'id', 'class', 'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
@@ -950,15 +950,19 @@ function _mediaAttrs(srcTag) {
 	return _getAttrList(unescape(srcTag));
 }
 function _mediaEmbed(attrs) {
+    var autostart = ""
+    if (attrs.autostart){
+        autostart = 'autoplay="autoplay"'
+    }
     if (/\.(mp4|ogg|mp3|webm|f4v)(\?|$)/i.test(attrs.flashvars)) {
-        var html = "<video src='"+attrs.flashvars+"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls' class='video-width-s'>";
+        var html = "<video src='"+attrs.flashvars+"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls' class='video-width-s' "+autostart+">";
         html += '<embed class="video-width-son" name="player" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
         _each(attrs, function(key, val) {
             html += key + '="' + val + '" ';
         });
         html += '/></video>';
     }else if(/\.(mp4|ogg|mp3|webm|f4v)(\?|$)/i.test(attrs.src)) {
-        var html = "<video src='"+ attrs.src+"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls' class='video-width-s'>";
+        var html = "<video src='"+ attrs.src+"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls' class='video-width-s' "+autostart+">";
         html += '<embed class="video-width-son" name="player" allowscriptaccess="always" allowfullscreen="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" ';
         _each(attrs, function(key, val) {
             html += key + '="' + val + '" ';
@@ -6671,8 +6675,8 @@ KindEditor.plugin('clearhtml', function(K) {
 		html = html.replace(/(<style[^>]*>)([\s\S]*?)(<\/style>)/ig, '');
 		html = K.formatHtml(html, {
 			a : ['href', 'target'],
-			embed : ['src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
-            video : ['src', 'width', 'height', 'controls'],
+			embed : ['src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess','class'],
+            video : ['src', 'width', 'height', 'controls','class','autoplay'],
 			img : ['src', 'width', 'height', 'border', 'alt', 'title', '.width', '.height'],
 			table : ['border'],
 			'td,th' : ['rowspan', 'colspan'],
