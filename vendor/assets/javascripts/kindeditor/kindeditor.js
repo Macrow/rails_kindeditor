@@ -950,9 +950,9 @@ function _mediaAttrs(srcTag) {
 	return _getAttrList(unescape(srcTag));
 }
 function _mediaEmbed(attrs) {
-    var autostart = ""
+    var autostart = "";
     if (attrs.autostart){
-        autostart = 'autoplay="autoplay"'
+        autostart = 'autoplay="autoplay"';
     }
     if (/\.(mp4|ogg|mp3|webm|f4v)(\?|$)/i.test(attrs.flashvars)) {
         var html = "<video src='"+attrs.flashvars+"'  width='"+ attrs.width + "' height='"+ attrs.height +"' controls='controls' class='video-width-s' "+autostart+">";
